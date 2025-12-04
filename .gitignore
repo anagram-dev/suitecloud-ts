@@ -38,3 +38,11 @@ Thumbs.db
 
 # Project config
 project.json
+
+# Env
+.env*
+!.env.sample
+
+# Nix
+!.envrc
+.direnv
