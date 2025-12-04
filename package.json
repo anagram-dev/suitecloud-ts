@@ -1,0 +1,14 @@
+{
+  "name": "suitecloud-acp-ts",
+  "version": "1.0.0",
+  "description": "SuiteCloud Account Customization Project with TypeScript support",
+  "author": "Joaquin Gatica <me@joaquingatica.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaquingatica/suitecloud-acp-ts.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@oracle/suitecloud-cli": "^3.1.0"
+  }
+}
