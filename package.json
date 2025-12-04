@@ -8,7 +8,15 @@
     "url": "git+https://github.com/joaquingatica/suitecloud-acp-ts.git"
   },
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "@oracle/suitecloud-cli": "^3.1.0"
+  },
+  "devDependencies": {
+    "jest": "29.7.0",
+    "@types/jest": "29.5.14",
+    "@oracle/suitecloud-unit-testing": "^1.7.0"
   }
 }
