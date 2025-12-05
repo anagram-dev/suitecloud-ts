@@ -6,6 +6,7 @@
     "lib": ["es2023"],
     "strict": true,
     "exactOptionalPropertyTypes": true,
+    "allowJs": true,
     "outDir": "src/FileCabinet/SuiteScripts/",
     "rootDir": "src/SuiteScripts",
     "paths": {
