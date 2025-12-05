@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "amd",
+    "target": "es2023",
+    "moduleResolution": "node",
+    "lib": ["es2023"],
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "outDir": "src/FileCabinet/SuiteScripts/",
+    "rootDir": "src/SuiteScripts",
+    "paths": {
+      "N": ["./node_modules/@hitc/netsuite-types/N"],
+      "N/*": ["./node_modules/@hitc/netsuite-types/N/*"]
+    }
+  },
+  "include": ["src/SuiteScripts/**/*"]
+}

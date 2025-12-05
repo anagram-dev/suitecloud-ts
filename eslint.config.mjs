@@ -7,29 +7,33 @@ import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import requirejs from 'eslint-plugin-requirejs';
 import globals from 'globals';
 
+const distFiles = ['src/FileCabinet/SuiteScripts/**/*'];
 const commonJsFiles = ['jest.config.js', 'suitecloud.config.js'];
 
 export default defineConfig([
     {
         // shared config for all JS files regardless of version or type
         files: ['**/*.{js,mjs,cjs}'],
+        ignores: [...distFiles],
         plugins: { js },
         extends: ['js/recommended'],
     },
     {
         // config ESM files not using the mjs extension
         files: ['**/*.js'],
-        ignores: [...commonJsFiles],
+        ignores: [...distFiles, ...commonJsFiles],
         languageOptions: { sourceType: 'module' },
     },
     {
         // config for JS files or utility scripts not using ESM
         files: [...commonJsFiles],
+        ignores: [...distFiles],
         languageOptions: { sourceType: 'commonjs' },
     },
     {
         // config for SuiteScript files
         files: ['src/**/*.js'],
+        ignores: [...distFiles],
         plugins: { requirejs },
         languageOptions: {
             // SuiteScript 2.1 supports ECMAScript 2023
@@ -69,6 +73,7 @@ export default defineConfig([
     {
         // config for test JS files
         files: ['**/__tests__/**/*.js'],
+        ignores: [...distFiles],
         plugins: { jest },
         languageOptions: { globals: jest.environments.globals.globals },
     },

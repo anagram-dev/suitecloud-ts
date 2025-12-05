@@ -8,6 +8,13 @@
       "options": {
         "tabWidth": 2
       }
+    },
+    {
+      "files": "*.ts",
+      "options": {
+        "semi": false,
+        "tabWidth": 2
+      }
     }
   ]
 }
