@@ -46,3 +46,6 @@ project.json
 # Nix
 !.envrc
 .direnv
+
+# Lint & Format
+.eslintcache
