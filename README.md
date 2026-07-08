@@ -9,18 +9,23 @@ This project demonstrates **Option 3** of the folder structure alternatives prop
 ## Folder Structure
 
 ```text
-src/
-  FileCabinet/          # tsc output — compiled JS files go here (deployed to NetSuite)
-  SuiteScripts/         # TypeScript source files live here (not deployed)
-  Objects/              # SuiteCloud objects (XML)
-  ...
+src/                    # folder used as `defaultProjectFolder` in suitecloud.config.js
+  FileCabinet/          # standard folder expected by the SuiteCloud CLI
+    SuiteScripts/       # TS output folder, ignored from Git, deployed to NetSuite
+    ...                 # other folders expected by the SuiteCloud CLI (i.e. Templates)
+  SuiteScripts/         # TS and JS source files, not deployed to NetSuite
+  Objects/              # SuiteCloud XML objects
+  deploy.xml
+  manifest.xml
 ```
 
 TypeScript source files sit inside `defaultProjectFolder` (i.e. `src/`) but outside `FileCabinet/`.
 The TypeScript compiler outputs compiled JS directly into `src/FileCabinet/SuiteScripts/`, which is
 what gets deployed to the File Cabinet, and is ignored from Git.
 
-### Features
+## Features
+
+### Main features
 
 - TypeScript and JavaScript files are compiled into the native `FileCabinet` folder
   expected by the CLI
@@ -35,7 +40,7 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 - (TODO) Support for TypeScript v7
 - (TODO) Support bundling third party libraries into SuitScript compatible source
 
-Other quality-of-life features for developers:
+### Quality-of-life features
 
 - ESLint with TypeScript support and `requirejs` rules for plain JavaScript files
 - Prettier formatting
@@ -70,8 +75,3 @@ hook in `suitecloud.config.js`. Run deployments and other SuiteCloud CLI command
 ```bash
 suitecloud project:deploy
 ```
-
-## Dependencies
-
-- [`typescript`](https://www.typescriptlang.org/) — TypeScript compiler
-- [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) — NetSuite type definitions

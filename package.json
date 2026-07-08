@@ -7,7 +7,6 @@
     "type": "git",
     "url": "git+https://github.com/joaquingatica/suitecloud-ts.git"
   },
-  "license": "MIT",
   "scripts": {
     "build:ts": "tsc",
     "build:static": "copyfiles -u 1 -e \"./src/SuiteScripts/**/*.ts\" \"./src/SuiteScripts/**/*\" ./src/FileCabinet/",
