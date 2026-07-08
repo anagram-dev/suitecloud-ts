@@ -1,4 +1,4 @@
-# suitecloud-acp-ts
+# suitecloud-ts
 
 Sample scaffolding for using TypeScript in NetSuite SuiteCloud Account Customization Projects (ACP).
 
