@@ -22,13 +22,29 @@ export default defineConfig([
         // config ESM files not using the mjs extension
         files: ['**/*.js'],
         ignores: [...distFiles, ...commonJsFiles],
-        languageOptions: { sourceType: 'module' },
+        languageOptions: {
+            sourceType: 'module',
+            globals: {
+                ...globals.builtin,
+                ...globals.es2023,
+                ...globals.node,
+                ...globals.nodeBuiltin,
+            },
+        },
     },
     {
         // config for JS files or utility scripts not using ESM
         files: [...commonJsFiles],
         ignores: [...distFiles],
-        languageOptions: { sourceType: 'commonjs' },
+        languageOptions: {
+            sourceType: 'commonjs',
+            globals: {
+                ...globals.builtin,
+                ...globals.es2023,
+                ...globals.node,
+                ...globals.nodeBuiltin,
+            },
+        },
     },
     {
         // config for SuiteScript files
@@ -42,6 +58,9 @@ export default defineConfig([
             // Neither `module`, `commonjs` or `script` is exactly AMD, but `script` is the closest
             sourceType: 'script',
             globals: {
+                ...globals.builtin,
+                ...globals.es2023,
+                ...globals.browser,
                 ...globals.amd,
             },
         },
