@@ -34,6 +34,14 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 - (TODO) Support for TypeScript v7
 - (TODO) Support bundling third party libraries into SuitScript compatible source
 
+Other quality-of-life features for developers:
+
+- ESLint and Prettier
+- Includes GitHub Action for PR validation
+- Pre-commit hooks for linting, format and conventional commit message
+- NVM support via `.nvmrc` file
+- Nix flake configuration with `direnv` support for dev shell
+
 ## Setup
 
 Install dependencies:
