@@ -18,8 +18,10 @@ const runNpmCommand = (command) => async () =>
         });
     });
 
-const clean = runNpmCommand('clean');
-const build = runNpmCommand('build');
+const build = async () => {
+    await runNpmCommand('clean');
+    await runNpmCommand('build');
+};
 const test = async () => {
     await SuiteCloudJestUnitTestRunner.run({
         // Jest configuration options.
@@ -27,7 +29,7 @@ const test = async () => {
 };
 
 const tap = (fn) => async (args) => {
-    await fn();
+    await fn(args);
     return args;
 };
 
@@ -36,22 +38,15 @@ module.exports = {
     commands: {
         'project:deploy': {
             beforeExecuting: tap(async () => {
-                await clean();
                 await build();
                 await test();
             }),
         },
         'project:package': {
-            beforeExecuting: tap(async () => {
-                await clean();
-                await build();
-            }),
+            beforeExecuting: tap(build),
         },
         'project:validate': {
-            beforeExecuting: tap(async () => {
-                await clean();
-                await build();
-            }),
+            beforeExecuting: tap(build),
         },
     },
 };
