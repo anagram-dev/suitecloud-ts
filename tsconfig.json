@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "lib": ["es2023"],
     "strict": true,
+    "ignoreDeprecations": "6.0",
     "exactOptionalPropertyTypes": true,
     "allowJs": true,
     "outDir": "src/FileCabinet/SuiteScripts/",
