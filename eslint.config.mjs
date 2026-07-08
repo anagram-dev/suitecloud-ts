@@ -6,6 +6,7 @@ import jest from 'eslint-plugin-jest';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import requirejs from 'eslint-plugin-requirejs';
 import globals from 'globals';
+import typeScriptEslint from 'typescript-eslint';
 
 const distFiles = ['src/FileCabinet/SuiteScripts/**/*'];
 const commonJsFiles = ['jest.config.js', 'suitecloud.config.js'];
@@ -47,7 +48,7 @@ export default defineConfig([
         },
     },
     {
-        // config for SuiteScript files
+        // config for JavaScript SuiteScript files
         files: ['src/**/*.js'],
         ignores: [...distFiles],
         plugins: { requirejs },
@@ -87,6 +88,25 @@ export default defineConfig([
             'requirejs/amd-function-arity': ['error'],
             'requirejs/sort-amd-paths': ['off'],
             'requirejs/no-restricted-amd-modules': ['error'],
+        },
+    },
+    {
+        // config for TypeScript SuiteScript files
+        files: ['src/**/*.ts'],
+        ignores: [...distFiles],
+        extends: [...typeScriptEslint.configs.recommended],
+        languageOptions: {
+            // SuiteScript 2.1 supports ECMAScript 2023
+            // https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156042690639.html
+            ecmaVersion: 2023,
+            globals: {
+                ...globals.builtin,
+                ...globals.es2023,
+                ...globals.browser,
+            },
+        },
+        rules: {
+            'no-shadow': 'error',
         },
     },
     {

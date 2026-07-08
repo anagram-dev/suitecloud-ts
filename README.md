@@ -31,12 +31,14 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 - Developer is warned whenever a file may be downloaded/created in the ignored folder
 - Allows incremental adoption of TypeScript into existing JavaScript projects by
   supporting import of JavaScript files from TypeScript
+- Includes NetSuite types via 3rd-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
 - (TODO) Support for TypeScript v7
 - (TODO) Support bundling third party libraries into SuitScript compatible source
 
 Other quality-of-life features for developers:
 
-- ESLint and Prettier
+- ESLint with TypeScript support and `requirejs` rules for plain JavaScript files
+- Prettier formatting
 - Includes GitHub Action for PR validation
 - Pre-commit hooks for linting, format and conventional commit message
 - NVM support via `.nvmrc` file
