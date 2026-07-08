@@ -22,9 +22,13 @@ const runNpmCommand = async (command) =>
             shell: process.platform === 'win32',
         });
         child.on('error', reject);
-        child.on('close', (code) => {
+        child.on('close', (code, signal) => {
             if (code === 0) {
                 resolve();
+            } else if (signal) {
+                reject(
+                    new Error(`"${command}" was killed by signal ${signal}`),
+                );
             } else {
                 reject(new Error(`"${command}" exited with code ${code}`));
             }

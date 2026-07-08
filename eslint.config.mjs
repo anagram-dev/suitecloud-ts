@@ -105,9 +105,6 @@ export default defineConfig([
                 ...globals.browser,
             },
         },
-        rules: {
-            'no-shadow': 'error',
-        },
     },
     {
         // config for test JS files
