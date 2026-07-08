@@ -10,7 +10,6 @@
   <scriptdeployments>
     <scriptdeployment scriptid="customdeploy_rl_echo">
       <allemployees>F</allemployees>
-      <allpartners>F</allpartners>
       <allroles>T</allroles>
       <audslctrole></audslctrole>
       <isdeployed>T</isdeployed>

@@ -4,8 +4,15 @@
   "tabWidth": 4,
   "overrides": [
     {
-      "files": "*.json",
+      "files": "*.{json,yaml,yml}",
       "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": "*.ts",
+      "options": {
+        "semi": false,
         "tabWidth": 2
       }
     }

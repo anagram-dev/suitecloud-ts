@@ -49,3 +49,6 @@ project.json
 
 # Lint & Format
 .eslintcache
+
+# Dist & Bin
+src/FileCabinet/SuiteScripts

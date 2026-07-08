@@ -6,30 +6,51 @@ import jest from 'eslint-plugin-jest';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import requirejs from 'eslint-plugin-requirejs';
 import globals from 'globals';
+import typeScriptEslint from 'typescript-eslint';
 
+const distFiles = ['src/FileCabinet/SuiteScripts/**/*'];
 const commonJsFiles = ['jest.config.js', 'suitecloud.config.js'];
 
 export default defineConfig([
     {
         // shared config for all JS files regardless of version or type
         files: ['**/*.{js,mjs,cjs}'],
+        ignores: [...distFiles],
         plugins: { js },
         extends: ['js/recommended'],
     },
     {
         // config ESM files not using the mjs extension
         files: ['**/*.js'],
-        ignores: [...commonJsFiles],
-        languageOptions: { sourceType: 'module' },
+        ignores: [...distFiles, ...commonJsFiles],
+        languageOptions: {
+            sourceType: 'module',
+            globals: {
+                ...globals.builtin,
+                ...globals.es2023,
+                ...globals.node,
+                ...globals.nodeBuiltin,
+            },
+        },
     },
     {
         // config for JS files or utility scripts not using ESM
         files: [...commonJsFiles],
-        languageOptions: { sourceType: 'commonjs' },
+        ignores: [...distFiles],
+        languageOptions: {
+            sourceType: 'commonjs',
+            globals: {
+                ...globals.builtin,
+                ...globals.es2023,
+                ...globals.node,
+                ...globals.nodeBuiltin,
+            },
+        },
     },
     {
-        // config for SuiteScript files
+        // config for JavaScript SuiteScript files
         files: ['src/**/*.js'],
+        ignores: [...distFiles],
         plugins: { requirejs },
         languageOptions: {
             // SuiteScript 2.1 supports ECMAScript 2023
@@ -38,6 +59,9 @@ export default defineConfig([
             // Neither `module`, `commonjs` or `script` is exactly AMD, but `script` is the closest
             sourceType: 'script',
             globals: {
+                ...globals.builtin,
+                ...globals.es2023,
+                ...globals.browser,
                 ...globals.amd,
             },
         },
@@ -67,8 +91,25 @@ export default defineConfig([
         },
     },
     {
+        // config for TypeScript SuiteScript files
+        files: ['src/**/*.ts'],
+        ignores: [...distFiles],
+        extends: [...typeScriptEslint.configs.recommended],
+        languageOptions: {
+            // SuiteScript 2.1 supports ECMAScript 2023
+            // https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156042690639.html
+            ecmaVersion: 2023,
+            globals: {
+                ...globals.builtin,
+                ...globals.es2023,
+                ...globals.browser,
+            },
+        },
+    },
+    {
         // config for test JS files
         files: ['**/__tests__/**/*.js'],
+        ignores: [...distFiles],
         plugins: { jest },
         languageOptions: { globals: jest.environments.globals.globals },
     },
