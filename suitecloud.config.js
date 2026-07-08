@@ -14,7 +14,7 @@ const writeInfo = (message) => {
     process.stdout.write(`${BOLD_BLUE}${message}${RESET}\n`);
 };
 
-const runNpmCommand = (command) => async () =>
+const runNpmCommand = async (command) =>
     new Promise((resolve, reject) => {
         const child = spawn('npm', ['run', command], {
             cwd: __dirname,
