@@ -52,4 +52,4 @@ project.json
 
 # Dist & Bin
 src/FileCabinet/SuiteScripts
-dist
+build

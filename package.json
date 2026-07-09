@@ -13,7 +13,7 @@
     "build:js:copy": "copyfiles -u 1 \"./src/SuiteScripts/**/*.js\" ./src/FileCabinet/",
     "build": "npm run build:ts && concurrently \"npm:build:js:*\"",
     "check": "./node_modules/typescript7/bin/tsc --noEmit",
-    "clean": "rimraf ./src/FileCabinet/SuiteScripts ./dist",
+    "clean": "rimraf ./src/FileCabinet/SuiteScripts ./build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",

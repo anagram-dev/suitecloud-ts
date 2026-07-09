@@ -3,13 +3,13 @@ import { globSync, existsSync } from 'node:fs'
 import { resolve, dirname, extname } from 'node:path'
 
 export default {
-  input: globSync('dist/**/*.js'),
+  input: globSync('build/**/*.js'),
   output: {
     dir: 'src/FileCabinet/SuiteScripts',
     format: 'amd',
     esModule: false,
     preserveModules: true,
-    preserveModulesRoot: 'dist',
+    preserveModulesRoot: 'build',
   },
   plugins: [
     {
@@ -22,7 +22,7 @@ export default {
       // If Rollup is resolving an import to an original JS AMD file import, not built by TS,
       //  then it should be treated as external. It will be statically copied outside the bundler.
       // An import is of that type when it's relative, doesn't have a `.js` extension, and
-      //  there's no file in `dist` for its path.
+      //  there's no file in `build` for its path.
       name: 'externalize-jsamd-imports',
       resolveId(id, parentId) {
         // When resolving an input file, then `id` is the file path and `parentId` is empty.

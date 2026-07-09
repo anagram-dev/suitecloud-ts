@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "src/SuiteScripts",
-    "outDir": "dist/",
+    "outDir": "build/",
     "noEmit": false
   }
 }
