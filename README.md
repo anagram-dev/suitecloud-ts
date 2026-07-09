@@ -113,10 +113,29 @@ Runs concurrently with `build:ts`. Plain JavaScript files under `src/SuiteScript
 (existing AMD scripts not managed by tsc) are copied directly into `src/FileCabinet/SuiteScripts/`
 with `copyfiles`.
 
+## SuiteCloud CLI Build Hooks
+
+`suitecloud.config.js` hooks into several SuiteCloud CLI commands via `beforeExecuting` to automate
+the build and keep the developer experience consistent:
+
+| Command            | Hook behavior                            |
+| ------------------ | ---------------------------------------- |
+| `project:deploy`   | Runs build and tests                     |
+| `project:validate` | Runs build                               |
+| `project:package`  | Runs build                               |
+| `file:upload`      | Runs build                               |
+| `file:create`      | Prints a note to move generated JS files |
+| `file:import`      | Prints a note to move generated JS files |
+| `object:import`    | Prints a note to move generated JS files |
+| `object:update`    | Prints a note to move generated JS files |
+
+Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
+print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
+build pipeline rather overritten by the next build.
+
 ## Deployment
 
-The project compiles TypeScript before deploying or validating via the `beforeExecuting`
-hook in `suitecloud.config.js`. Run deployments and other SuiteCloud CLI commands as usual:
+Run deployments and other SuiteCloud CLI commands as usual — the build runs automatically before each command:
 
 ```bash
 suitecloud project:deploy
