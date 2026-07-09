@@ -57,6 +57,15 @@ Install dependencies:
 npm install
 ```
 
+## Usage
+
+Run deployments and other SuiteCloud CLI commands as usual. The build runs
+automatically before each command.
+
+```bash
+suitecloud project:deploy
+```
+
 ## Scripts
 
 | Script                            | Description                                               |
@@ -132,11 +141,3 @@ the build and keep the developer experience consistent:
 Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
 print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
 build pipeline rather overritten by the next build.
-
-## Deployment
-
-Run deployments and other SuiteCloud CLI commands as usual — the build runs automatically before each command:
-
-```bash
-suitecloud project:deploy
-```
