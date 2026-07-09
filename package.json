@@ -8,10 +8,11 @@
     "url": "git+https://github.com/joaquingatica/suitecloud-ts.git"
   },
   "scripts": {
-    "build:ts": "./node_modules/typescript7/bin/tsc -p tsconfig.build.json",
-    "build:js:bundle": "rollup -c rollup.config.mjs",
-    "build:js:copy": "copyfiles -u 1 \"./src/SuiteScripts/**/*.js\" ./src/FileCabinet/",
-    "build": "npm run build:ts && concurrently \"npm:build:js:*\"",
+    "build:ts:compile": "./node_modules/typescript7/bin/tsc -p tsconfig.build.json",
+    "build:ts:bundle": "rollup -c rollup.config.mjs",
+    "build:ts": "npm run build:ts:compile && npm run build:ts:bundle",
+    "build:js": "copyfiles -u 1 \"./src/SuiteScripts/**/*.js\" ./src/FileCabinet/",
+    "build": "concurrently \"npm:build:ts\" \"npm:build:js\"",
     "check": "./node_modules/typescript7/bin/tsc --noEmit",
     "clean": "rimraf ./src/FileCabinet/SuiteScripts ./build",
     "lint": "eslint .",
