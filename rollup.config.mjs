@@ -38,6 +38,23 @@ export default {
         return null
       },
     },
+    {
+      // Rollup wraps module content inside `define`, moving file-level
+      //  @NApiVersion/@NScriptType annotations inside it, so we need to move
+      //  them to the top of the file.
+      name: 'hoist-netsuite-annotations',
+      renderChunk(code) {
+        const banner = code
+          .match(/\/\*\*[\s\S]*?@NApiVersion[\s\S]*?\*\//)?.[0]
+          ?.trim()
+        if (!banner) {
+          return null
+        }
+        const dedentedBanner = banner.replace(/^[ \t]+(\*)/gm, ' $1')
+        const strippedCode = code.replace(banner, '')
+        return { code: `${dedentedBanner}\n${strippedCode}` }
+      },
+    },
     nodeResolve(),
   ],
 }
