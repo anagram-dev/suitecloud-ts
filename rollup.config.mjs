@@ -10,12 +10,26 @@ export default {
     esModule: false,
     preserveModules: true,
     preserveModulesRoot: 'build',
+    interop: (id) => (/^N(\/|$)/.test(id) ? 'defaultOnly' : 'auto'),
   },
   plugins: [
     {
       name: 'externalize-nmodule-imports',
       resolveId(id, parentId) {
         return parentId && /^N(\/|$)/.test(id) ? { id, external: true } : null
+      },
+    },
+    {
+      // TS preserves star imports upon build, and they need to be rewritten to
+      //  default imports to avoid Rollup adding interop boilerplate
+      name: 'rewrite-nmodule-star-imports',
+      transform(code) {
+        return {
+          code: code.replace(
+            /^import \* as (\w+) from ('N(?:\/[^']+)?');/gm,
+            'import $1 from $2;',
+          ),
+        }
       },
     },
     {
@@ -40,8 +54,8 @@ export default {
     },
     {
       // Rollup wraps module content inside `define`, moving file-level
-      //  @NApiVersion/@NScriptType annotations inside it, so we need to move
-      //  them to the top of the file.
+      //  @NApiVersion/@NScriptType annotations inside it, so they need to be
+      //  moved to the top of the file.
       name: 'hoist-netsuite-annotations',
       renderChunk(code) {
         const banner = code
