@@ -10,7 +10,7 @@
       }
     },
     {
-      "files": "*.ts",
+      "files": "**/*.{mjs,ts,mts}",
       "options": {
         "semi": false,
         "tabWidth": 2

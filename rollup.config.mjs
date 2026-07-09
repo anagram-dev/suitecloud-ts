@@ -1,35 +1,43 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import { readdirSync, statSync } from 'node:fs';
-import { join, relative, extname } from 'node:path';
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import { globSync, existsSync } from 'node:fs'
+import { resolve, dirname, extname } from 'node:path'
 
-const srcDir = 'dist';
-const outDir = 'src/FileCabinet/SuiteScripts';
-
-const collectEntries = (dir) => {
-    const entries = [];
-    for (const file of readdirSync(dir)) {
-        const fullPath = join(dir, file);
-        if (statSync(fullPath).isDirectory()) {
-            entries.push(...collectEntries(fullPath));
-        } else if (extname(file) === '.js') {
-            entries.push(fullPath);
+export default {
+  input: globSync('dist/**/*.js'),
+  output: {
+    dir: 'src/FileCabinet/SuiteScripts',
+    format: 'amd',
+    esModule: false,
+    preserveModules: true,
+    preserveModulesRoot: 'dist',
+  },
+  plugins: [
+    {
+      name: 'externalize-nmodule-imports',
+      resolveId(id, parentId) {
+        return parentId && /^N(\/|$)/.test(id) ? { id, external: true } : null
+      },
+    },
+    {
+      // If Rollup is resolving an import to an original JS AMD file import, not built by TS,
+      //  then it should be treated as external. It will be statically copied outside the bundler.
+      // An import is of that type when it's relative, doesn't have a `.js` extension, and
+      //  there's no file in `dist` for its path.
+      name: 'externalize-jsamd-imports',
+      resolveId(id, parentId) {
+        // When resolving an input file, then `id` is the file path and `parentId` is empty.
+        // When resolving an import path, then `id` is the imported path and `parentId` is the importing path.
+        if (!id.startsWith('.') || !parentId) {
+          return null
         }
-    }
-    return entries;
-};
-
-const nModulePattern = /^N(\/|$)/;
-
-export default collectEntries(srcDir).map((entry) => {
-    const relPath = relative(srcDir, entry);
-    return {
-        input: entry,
-        output: {
-            file: `${outDir}/${relPath}`,
-            format: 'amd',
-            esModule: false,
-        },
-        external: (id) => nModulePattern.test(id) || id.startsWith('.'),
-        plugins: [nodeResolve()],
-    };
-});
+        const ext = extname(id)
+        const resolved = resolve(dirname(parentId), ext ? id : `${id}.js`)
+        if (!existsSync(resolved)) {
+          return { id, external: true }
+        }
+        return null
+      },
+    },
+    nodeResolve(),
+  ],
+}
