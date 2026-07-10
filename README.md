@@ -76,6 +76,26 @@ suitecloud project:deploy
 | `npm run format` / `format:check` | Format or check format with Prettier                      |
 | `npm test`                        | Run unit tests with Jest                                  |
 
+## SuiteCloud CLI Hooks
+
+`suitecloud.config.js` hooks into several SuiteCloud CLI commands via `beforeExecuting` to automate
+the build and keep the developer experience consistent:
+
+| Command            | Hook behavior                            |
+| ------------------ | ---------------------------------------- |
+| `project:deploy`   | Runs build and tests                     |
+| `project:validate` | Runs build                               |
+| `project:package`  | Runs build                               |
+| `file:upload`      | Runs build                               |
+| `file:create`      | Prints a note to move generated JS files |
+| `file:import`      | Prints a note to move generated JS files |
+| `object:import`    | Prints a note to move generated JS files |
+| `object:update`    | Prints a note to move generated JS files |
+
+Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
+print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
+build pipeline rather overritten by the next build.
+
 ## Build Pipeline
 
 SuiteScript files must be delivered as AMD modules, but TypeScript 7 dropped the
@@ -130,23 +150,3 @@ structure. Several inline plugins handle NetSuite-specific concerns:
 Runs concurrently with `build:ts`. Plain JavaScript files under `src/SuiteScripts/`
 (existing AMD scripts not managed by tsc) are copied directly into `src/FileCabinet/SuiteScripts/`
 with `copyfiles`.
-
-## SuiteCloud CLI Build Hooks
-
-`suitecloud.config.js` hooks into several SuiteCloud CLI commands via `beforeExecuting` to automate
-the build and keep the developer experience consistent:
-
-| Command            | Hook behavior                            |
-| ------------------ | ---------------------------------------- |
-| `project:deploy`   | Runs build and tests                     |
-| `project:validate` | Runs build                               |
-| `project:package`  | Runs build                               |
-| `file:upload`      | Runs build                               |
-| `file:create`      | Prints a note to move generated JS files |
-| `file:import`      | Prints a note to move generated JS files |
-| `object:import`    | Prints a note to move generated JS files |
-| `object:update`    | Prints a note to move generated JS files |
-
-Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
-print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
-build pipeline rather overritten by the next build.
