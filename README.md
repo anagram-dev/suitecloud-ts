@@ -8,14 +8,18 @@ proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsu
 ## Folder Structure
 
 ```text
-src/                    # folder used as `defaultProjectFolder` in suitecloud.config.js
-  FileCabinet/          # standard folder expected by the SuiteCloud CLI
-    SuiteScripts/       # TS output folder, ignored from Git, deployed to NetSuite
-    ...                 # other folders expected by the SuiteCloud CLI (i.e. Templates)
-  SuiteScripts/         # TS and JS source files, not deployed to NetSuite
-  Objects/              # SuiteCloud XML objects
-  deploy.xml
-  manifest.xml
+/
+├ .github/workflows       # github actions
+├ __tests__/              # jest tests
+├ lib/                    # entry points for Zod and other 3rd-party libs for bundling
+├ src/                    # folder used as `defaultProjectFolder` in suitecloud.config.js
+│ ├ FileCabinet/          # standard folder expected by the SuiteCloud CLI
+│ │ └ ...                 # folders expected by the SuiteCloud CLI except SuiteScripts (i.e. Templates)
+│ ├ Objects/              # SuiteCloud XML objects
+│ ├ SuiteScripts/         # TS and JS source files, not deployed to NetSuite
+│ ├ deploy.xml
+│ └ manifest.xml
+└ ...                     # project, build, bundle and SuiteCloud configuration files
 ```
 
 TypeScript source files sit inside `defaultProjectFolder` (i.e. `src/`) but outside `FileCabinet/`.
