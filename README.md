@@ -1,10 +1,9 @@
 # suitecloud-ts
 
-Sample scaffolding for using TypeScript in NetSuite SuiteCloud Account Customization Projects (ACP).
+Scaffolding for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
 
-This project demonstrates **Option 3** of the folder structure alternatives proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976):
-
-> Use TS files inside `defaultProjectFolder` but outside the `FileCabinet` folder, `tsc` builds into `FileCabinet`.
+Additionally, this project demonstrates **Option 3** of the folder structure alternatives
+proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976).
 
 ## Folder Structure
 
