@@ -2,10 +2,10 @@
   "name": "suitecloud-ts",
   "version": "1.0.0",
   "description": "SuiteCloud Account Customization Project with TypeScript support",
-  "author": "Joaquin Gatica <me@joaquingatica.com>",
+  "author": "Joaquin Gatica <joaquin@anagram.dev>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joaquingatica/suitecloud-ts.git"
+    "url": "git+https://github.com/anagram-dev/suitecloud-ts.git"
   },
   "scripts": {
     "build:ts:compile": "./node_modules/typescript7/bin/tsc -p tsconfig.build.json",
