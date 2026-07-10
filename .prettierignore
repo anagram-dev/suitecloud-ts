@@ -3,3 +3,4 @@ src/Objects
 src/deploy.xml
 src/manifest.xml
 src/FileCabinet/SuiteScripts
+build

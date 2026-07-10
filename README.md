@@ -37,7 +37,7 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 - Allows incremental adoption of TypeScript into existing JavaScript projects by
   supporting import of JavaScript files from TypeScript
 - Includes NetSuite types via 3rd-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
-- (TODO) Support for TypeScript v7
+- TypeScript v7 for better performance and future support
 - (TODO) Support bundling third party libraries into SuitScript compatible source
 
 ### Quality-of-life features
@@ -57,6 +57,15 @@ Install dependencies:
 npm install
 ```
 
+## Usage
+
+Run deployments and other SuiteCloud CLI commands as usual. The build runs
+automatically before each command.
+
+```bash
+suitecloud project:deploy
+```
+
 ## Scripts
 
 | Script                            | Description                                               |
@@ -67,11 +76,77 @@ npm install
 | `npm run format` / `format:check` | Format or check format with Prettier                      |
 | `npm test`                        | Run unit tests with Jest                                  |
 
-## Deployment
+## Build Pipeline
 
-The project compiles TypeScript before deploying or validating via the `beforeExecuting`
-hook in `suitecloud.config.js`. Run deployments and other SuiteCloud CLI commands as usual:
+SuiteScript files must be delivered as AMD modules, but TypeScript 7 dropped the
+`module: "amd"` compiler option. The pipeline works around this by having `tsc` emit
+ESNext modules into an intermediate `build/` directory, then passing that output through
+Rollup to produce the AMD bundles that NetSuite expects.
 
-```bash
-suitecloud project:deploy
+The `npm run build` command runs `build:ts` and `build:js` concurrently. `build:ts`
+chains two sequential steps; `build:js` runs independently in parallel:
+
+```mermaid
+flowchart TD
+    START["src/SuiteScripts/**/*.{js,ts}\n(TS and AMD)"]
+    TS["src/SuiteScripts/**/*.ts\n(TS)"]
+    JS["src/SuiteScripts/**/*.js\n(AMD)"]
+    BUILD["build/**/*.js\n(ESNext)"]
+    FC["src/FileCabinet/SuiteScripts/**/*.js\n(AMD)"]
+
+    START -->|"build:ts"| TS
+    START -->|"build:js"| JS
+    TS -->|"build:ts:compile\ntsc"| BUILD
+    BUILD -->|"build:ts:bundle\nrollup → AMD"| FC
+    JS -->|"build:js\ncopyfiles"| FC
 ```
+
+### `build:ts:compile` - TypeScript compilation
+
+TypeScript 7 compiles `src/SuiteScripts/**/*.ts` into `build/` using `tsconfig.build.json`.
+The output format is ESNext with ES modules (`module: "esnext"`), producing clean
+intermediate JS before any bundling. NetSuite's `N/*` module paths are left as bare imports at this stage.
+
+> **Note:** TypeScript 7 is installed as `typescript7` (aliased from `npm:typescript@^7`) to
+> avoid conflicting with the `typescript` package, which remains at v6 so that
+> `typescript-eslint` (which does not yet support TypeScript 7) continues to work.
+
+### `build:ts:bundle` - Rollup bundling
+
+Runs after `build:ts:compile`. Rollup picks up every file in `build/` and outputs
+AMD modules into `src/FileCabinet/SuiteScripts/`, preserving the original module
+structure. Several inline plugins handle NetSuite-specific concerns:
+
+- Mark all `N/*` imports as external so Rollup does not attempt to bundle them.
+- Rewrite `import * as x from 'N/...'` to `import x from 'N/...'` so Rollup can emit clean
+  AMD dependencies without interop boilerplate.
+- Mark relative imports that resolve to plain JS AMD files (not compiled by tsc) as external
+  so they are not inlined.Tthose files are handled by the static copy step instead.
+- Moves `@NApiVersion`/`@NScriptType` JSDoc comments back to the top of each file,
+  because Rollup's AMD wrapper would place them inside `define()`.
+
+### `build:js` - Static JS copy
+
+Runs concurrently with `build:ts`. Plain JavaScript files under `src/SuiteScripts/`
+(existing AMD scripts not managed by tsc) are copied directly into `src/FileCabinet/SuiteScripts/`
+with `copyfiles`.
+
+## SuiteCloud CLI Build Hooks
+
+`suitecloud.config.js` hooks into several SuiteCloud CLI commands via `beforeExecuting` to automate
+the build and keep the developer experience consistent:
+
+| Command            | Hook behavior                            |
+| ------------------ | ---------------------------------------- |
+| `project:deploy`   | Runs build and tests                     |
+| `project:validate` | Runs build                               |
+| `project:package`  | Runs build                               |
+| `file:upload`      | Runs build                               |
+| `file:create`      | Prints a note to move generated JS files |
+| `file:import`      | Prints a note to move generated JS files |
+| `object:import`    | Prints a note to move generated JS files |
+| `object:update`    | Prints a note to move generated JS files |
+
+Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
+print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
+build pipeline rather overritten by the next build.

@@ -8,10 +8,13 @@
     "url": "git+https://github.com/joaquingatica/suitecloud-ts.git"
   },
   "scripts": {
-    "build:ts": "tsc",
-    "build:static": "copyfiles -u 1 -e \"./src/SuiteScripts/**/*.ts\" \"./src/SuiteScripts/**/*\" ./src/FileCabinet/",
-    "build": "concurrently \"npm:build:*\"",
-    "clean": "rimraf ./src/FileCabinet/SuiteScripts",
+    "build:ts:compile": "./node_modules/typescript7/bin/tsc -p tsconfig.build.json",
+    "build:ts:bundle": "rollup -c rollup.config.mjs",
+    "build:ts": "npm run build:ts:compile && npm run build:ts:bundle",
+    "build:js": "copyfiles -u 1 \"./src/SuiteScripts/**/*.js\" ./src/FileCabinet/",
+    "build": "concurrently \"npm:build:ts\" \"npm:build:js\"",
+    "check": "./node_modules/typescript7/bin/tsc --noEmit",
+    "clean": "rimraf ./src/FileCabinet/SuiteScripts ./build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -28,6 +31,7 @@
     "@hitc/netsuite-types": "^2026.1.7",
     "@oracle/suitecloud-cli": "^3.2.0",
     "@oracle/suitecloud-unit-testing": "^1.8.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@types/jest": "^30.0.0",
     "concurrently": "^10.0.3",
     "copyfiles": "^2.4.1",
@@ -42,7 +46,9 @@
     "lint-staged": "^16.4.0",
     "prettier": "^3.9.4",
     "rimraf": "^6.1.3",
+    "rollup": "^4.62.2",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.63.0"
+    "typescript-eslint": "^8.63.0",
+    "typescript7": "npm:typescript@^7.0.2"
   }
 }
