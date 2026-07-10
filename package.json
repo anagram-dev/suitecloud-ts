@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build:ts:compile": "./node_modules/typescript7/bin/tsc -p tsconfig.build.json",
-    "build:ts:bundle": "rollup -c rollup.config.mjs",
+    "build:ts:bundle": "rollup -c rollup.config.build.mjs",
     "build:ts": "npm run build:ts:compile && npm run build:ts:bundle",
     "build:js": "copyfiles -u 1 \"./src/SuiteScripts/**/*.js\" ./src/FileCabinet/",
     "build": "concurrently \"npm:build:ts\" \"npm:build:js\"",
