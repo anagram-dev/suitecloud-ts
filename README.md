@@ -54,11 +54,20 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 
 ## Setup
 
-Install dependencies:
+1. (Optional) If using `nix` and `direnv`, make sure flakes are enabled, and run:
 
-```bash
-npm install
-```
+    ```bash
+    direnv allow
+    ```
+
+2. If not using `nix`, make sure the `suitecloud-cli` [package](https://www.npmjs.com/package/@oracle/suitecloud-cli)
+   is installed globally.
+
+3. Install dependencies using `npm`:
+
+    ```bash
+    npm install
+    ```
 
 ## Usage
 
