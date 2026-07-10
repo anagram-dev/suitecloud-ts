@@ -111,10 +111,11 @@ build pipeline rather overritten by the next build.
 
 ## Build Pipeline
 
-SuiteScript files must be delivered as AMD modules, but TypeScript 7 dropped the
-`module: "amd"` compiler option. The pipeline works around this by having `tsc` emit
-ESNext modules into an intermediate `build/` directory, then passing that output through
-Rollup to produce the AMD bundles that NetSuite expects.
+SuiteScript files must be delivered as AMD modules, but [TypeScript 7 dropped the
+`module: "amd"` compiler option](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#updates-since-5.x-and-new-behaviors-from-6.0).
+The pipeline works around this by having `tsc` emit ESNext modules into an intermediate
+`build/` directory, then passing that output through Rollup to produce the AMD bundles
+that NetSuite expects.
 
 The `npm run build` command runs `build:ts` and `build:js` concurrently. `build:ts`
 chains two sequential steps; `build:js` runs independently in parallel:
