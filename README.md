@@ -1,6 +1,6 @@
 # suitecloud-ts
 
-Scaffolding for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
+Scaffolding and boilerplate for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
 
 Additionally, this project demonstrates **Option 3** of the folder structure alternatives
 proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976).
