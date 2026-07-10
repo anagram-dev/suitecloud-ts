@@ -6,9 +6,15 @@
 import type { EntryPoints } from 'N/types'
 import log from 'N/log'
 import runtime from 'N/runtime'
-import { successResponse, Response } from './utils/response'
+import { badRequestError } from './utils/error'
+import { successResponse, Response, errorResponse } from './utils/response'
+import z from './lib/zod'
 
 type Data = Record<string, unknown>
+
+const PayloadSchema = z.object({
+  echo: z.literal(true),
+})
 
 const logUser = () => {
   log.audit({
@@ -24,11 +30,23 @@ export const get: EntryPoints.RESTlet.get<Data, Response<Data>> = (params) => {
 
 export const post: EntryPoints.RESTlet.post<Data, Response<Data>> = (body) => {
   logUser()
+  const result = PayloadSchema.safeParse(body)
+  if (!result.success) {
+    return errorResponse(
+      badRequestError({ message: z.prettifyError(result.error) }),
+    )
+  }
   return successResponse({ body })
 }
 
 export const put: EntryPoints.RESTlet.put<Data, Response<Data>> = (body) => {
   logUser()
+  const result = PayloadSchema.safeParse(body)
+  if (!result.success) {
+    return errorResponse(
+      badRequestError({ message: z.prettifyError(result.error) }),
+    )
+  }
   return successResponse({ body })
 }
 

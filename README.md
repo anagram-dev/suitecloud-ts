@@ -1,22 +1,25 @@
 # suitecloud-ts
 
-Sample scaffolding for using TypeScript in NetSuite SuiteCloud Account Customization Projects (ACP).
+Scaffolding for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
 
-This project demonstrates **Option 3** of the folder structure alternatives proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976):
-
-> Use TS files inside `defaultProjectFolder` but outside the `FileCabinet` folder, `tsc` builds into `FileCabinet`.
+Additionally, this project demonstrates **Option 3** of the folder structure alternatives
+proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976).
 
 ## Folder Structure
 
 ```text
-src/                    # folder used as `defaultProjectFolder` in suitecloud.config.js
-  FileCabinet/          # standard folder expected by the SuiteCloud CLI
-    SuiteScripts/       # TS output folder, ignored from Git, deployed to NetSuite
-    ...                 # other folders expected by the SuiteCloud CLI (i.e. Templates)
-  SuiteScripts/         # TS and JS source files, not deployed to NetSuite
-  Objects/              # SuiteCloud XML objects
-  deploy.xml
-  manifest.xml
+/
+├ .github/workflows       # github actions
+├ __tests__/              # jest tests
+├ lib/                    # entry points for Zod and other 3rd-party libs for bundling
+├ src/                    # folder used as `defaultProjectFolder` in suitecloud.config.js
+│ ├ FileCabinet/          # standard folder expected by the SuiteCloud CLI
+│ │ └ ...                 # folders expected by the SuiteCloud CLI except SuiteScripts (i.e. Templates)
+│ ├ Objects/              # SuiteCloud XML objects
+│ ├ SuiteScripts/         # TS and JS source files, not deployed to NetSuite
+│ ├ deploy.xml
+│ └ manifest.xml
+└ ...                     # project, build, bundle and SuiteCloud configuration files
 ```
 
 TypeScript source files sit inside `defaultProjectFolder` (i.e. `src/`) but outside `FileCabinet/`.
@@ -38,7 +41,7 @@ what gets deployed to the File Cabinet, and is ignored from Git.
   supporting import of JavaScript files from TypeScript
 - Includes NetSuite types via 3rd-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
 - TypeScript v7 for better performance and future support
-- (TODO) Support bundling third party libraries into SuitScript compatible source
+- Support bundling third-party libraries into SuiteScript-compatible AMD modules
 
 ### Quality-of-life features
 
@@ -71,10 +74,31 @@ suitecloud project:deploy
 | Script                            | Description                                               |
 | --------------------------------- | --------------------------------------------------------- |
 | `npm run build`                   | Compile TypeScript and copy static files to `FileCabinet` |
+| `npm run bundle:lib`              | Bundle third-party libraries into `src/SuiteScripts/lib/` |
 | `npm run clean`                   | Remove compiled output from `FileCabinet/SuiteScripts`    |
 | `npm run lint` / `lint:fix`       | Lint the project or auto-fix linting issues               |
 | `npm run format` / `format:check` | Format or check format with Prettier                      |
 | `npm test`                        | Run unit tests with Jest                                  |
+
+## SuiteCloud CLI Hooks
+
+`suitecloud.config.js` hooks into several SuiteCloud CLI commands via `beforeExecuting` to automate
+the build and keep the developer experience consistent:
+
+| Command            | Hook behavior                            |
+| ------------------ | ---------------------------------------- |
+| `project:deploy`   | Runs build and tests                     |
+| `project:validate` | Runs build                               |
+| `project:package`  | Runs build                               |
+| `file:upload`      | Runs build                               |
+| `file:create`      | Prints a note to move generated JS files |
+| `file:import`      | Prints a note to move generated JS files |
+| `object:import`    | Prints a note to move generated JS files |
+| `object:update`    | Prints a note to move generated JS files |
+
+Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
+print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
+build pipeline rather overritten by the next build.
 
 ## Build Pipeline
 
@@ -131,22 +155,72 @@ Runs concurrently with `build:ts`. Plain JavaScript files under `src/SuiteScript
 (existing AMD scripts not managed by tsc) are copied directly into `src/FileCabinet/SuiteScripts/`
 with `copyfiles`.
 
-## SuiteCloud CLI Build Hooks
+## Library Bundler
 
-`suitecloud.config.js` hooks into several SuiteCloud CLI commands via `beforeExecuting` to automate
-the build and keep the developer experience consistent:
+Third-party npm packages cannot be loaded directly in SuiteScript, since it expects AMD modules
+served from the File Cabinet. The library bundler pre-bundles selected packages into self-contained
+AMD files that can be uploaded and imported like any other SuiteScript file.
 
-| Command            | Hook behavior                            |
-| ------------------ | ---------------------------------------- |
-| `project:deploy`   | Runs build and tests                     |
-| `project:validate` | Runs build                               |
-| `project:package`  | Runs build                               |
-| `file:upload`      | Runs build                               |
-| `file:create`      | Prints a note to move generated JS files |
-| `file:import`      | Prints a note to move generated JS files |
-| `object:import`    | Prints a note to move generated JS files |
-| `object:update`    | Prints a note to move generated JS files |
+### How it works
 
-Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
-print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
-build pipeline rather overritten by the next build.
+Each library gets a small entrypoint in `lib/` that re-exports the public API, for example:
+
+```ts
+// lib/zod.ts
+export { z as default } from 'zod';
+```
+
+Running `npm run bundle:lib` processes every entrypoint in `lib/` through Rollup
+(`rollup.config.lib.mjs`) and writes two output files per library into `src/SuiteScripts/lib/`:
+
+- **`<package>.js`** — the full library bundled as an AMD module, ready for the File Cabinet
+- **`<package>.d.ts`** — bundled type declarations for use during TypeScript development
+
+Both output files should be committed to the repository. They are consumed directly by the TypeScript
+build pipeline, and no build step is required for day-to-day development after the initial bundle.
+
+### Bundling a new library
+
+1. Install the package as a dev dependency:
+
+    ```bash
+    npm install --save-dev <package>
+    ```
+
+2. Create an entrypoint in `lib/` that exports the API your scripts will use, for example:
+
+    ```ts
+    // lib/<package>.ts
+    export { something as default } from '<package>';
+    ```
+
+3. Add two entries to the `export default` array in `rollup.config.lib.mjs`: one for the JS
+   bundle and one for the type declarations:
+
+    ```js
+    // JS bundle
+    {
+      input: `${dirs.entrypoints}/<package>.ts`,
+      output: { file: `${dirs.output}/<package>.js`, format: 'amd' },
+      plugins: [resolve()],
+    },
+    // Type declarations
+    {
+      input: `${dirs.entrypoints}/<package>.ts`,
+      output: { file: `${dirs.output}/<package>.d.ts`, format: 'es' },
+      plugins: [resolve(), dts({ respectExternal: true })],
+    },
+    ```
+
+4. Run the bundler and commit the output:
+
+    ```bash
+    npm run bundle:lib
+    git add src/SuiteScripts/lib/<package>.js src/SuiteScripts/lib/<package>.d.ts
+    ```
+
+5. In your SuiteScript files, import the bundled library using its relative path:
+
+    ```ts
+    import name from './lib/<package>';
+    ```
