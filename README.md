@@ -107,6 +107,10 @@ TypeScript 7 compiles `src/SuiteScripts/**/*.ts` into `build/` using `tsconfig.b
 The output format is ESNext with ES modules (`module: "esnext"`), producing clean
 intermediate JS before any bundling. NetSuite's `N/*` module paths are left as bare imports at this stage.
 
+> **Note:** TypeScript 7 is installed as `typescript7` (aliased from `npm:typescript@^7`) to
+> avoid conflicting with the `typescript` package, which remains at v6 so that
+> `typescript-eslint` (which does not yet support TypeScript 7) continues to work.
+
 ### `build:ts:bundle` - Rollup bundling
 
 Runs after `build:ts:compile`. Rollup picks up every file in `build/` and outputs
