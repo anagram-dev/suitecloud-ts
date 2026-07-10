@@ -78,6 +78,11 @@ suitecloud project:deploy
 
 ## Build Pipeline
 
+SuiteScript files must be delivered as AMD modules, but TypeScript 7 dropped the
+`module: "amd"` compiler option. The pipeline works around this by having `tsc` emit
+ESNext modules into an intermediate `build/` directory, then passing that output through
+Rollup to produce the AMD bundles that NetSuite expects.
+
 The `npm run build` command runs `build:ts` and `build:js` concurrently. `build:ts`
 chains two sequential steps; `build:js` runs independently in parallel:
 
