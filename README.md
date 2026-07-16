@@ -60,8 +60,11 @@ what gets deployed to the File Cabinet, and is ignored from Git.
     direnv allow
     ```
 
-2. If not using `nix`, make sure the `suitecloud-cli` [package](https://www.npmjs.com/package/@oracle/suitecloud-cli)
-   is installed globally.
+2. If not using `nix`, make sure that the following are installed globally:
+
+    - Node.js v22
+    - Oracle JDK or OpenJDK v21
+    - `@oracle/suitecloud-cli` [NPM package](https://www.npmjs.com/package/@oracle/suitecloud-cli)
 
 3. Install dependencies using `npm`:
 
