@@ -12,6 +12,8 @@ import z from './lib/zod'
 
 type Data = Record<string, unknown>
 
+type Payload = z.infer<typeof PayloadSchema>
+
 const PayloadSchema = z.object({
   echo: z.literal(true),
 })
@@ -28,7 +30,10 @@ export const get: EntryPoints.RESTlet.get<Data, Response<Data>> = (params) => {
   return successResponse({ params })
 }
 
-export const post: EntryPoints.RESTlet.post<Data, Response<Data>> = (body) => {
+export const post: EntryPoints.RESTlet.post<
+  Data,
+  Response<{ body: Payload }>
+> = (body) => {
   logUser()
   const result = PayloadSchema.safeParse(body)
   if (!result.success) {
@@ -36,10 +41,12 @@ export const post: EntryPoints.RESTlet.post<Data, Response<Data>> = (body) => {
       badRequestError({ message: z.prettifyError(result.error) }),
     )
   }
-  return successResponse({ body })
+  return successResponse({ body: result.data })
 }
 
-export const put: EntryPoints.RESTlet.put<Data, Response<Data>> = (body) => {
+export const put: EntryPoints.RESTlet.put<Data, Response<{ body: Payload }>> = (
+  body,
+) => {
   logUser()
   const result = PayloadSchema.safeParse(body)
   if (!result.success) {
@@ -47,7 +54,7 @@ export const put: EntryPoints.RESTlet.put<Data, Response<Data>> = (body) => {
       badRequestError({ message: z.prettifyError(result.error) }),
     )
   }
-  return successResponse({ body })
+  return successResponse({ body: result.data })
 }
 
 const delete_: EntryPoints.RESTlet.delete_<Data, Response<Data>> = (params) => {
