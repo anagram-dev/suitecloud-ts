@@ -124,19 +124,19 @@ working either way.
 
 ### ESLint
 
-Don't run `npm run lint`. Nothing else invokes it except the pre-commit hook and the GitHub
-Action, covered below.
+Don't run `npm run lint`. The only other things that invoke it are the pre-commit hook and the
+GitHub Action, both covered below.
 
 To silence it in an editor that lints automatically, add paths to the `ignores` array in
 `eslint.config.mjs`, or disable the ESLint extension for this workspace.
 
 ### Prettier
 
-Don't run `npm run format`. Formatting is not enforced outside the pre-commit hook and the
-GitHub Action.
+Don't run `npm run format`. Formatting is enforced by `npm run lint`, the pre-commit hook and the
+GitHub Action, since ESLint reports Prettier violations as lint errors through
+`eslint-plugin-prettier`.
 
-ESLint reports Prettier violations as lint errors through `eslint-plugin-prettier`, so
-`npm run lint` still enforces formatting. To exempt specific files, add them to `.prettierignore`.
+To exempt specific files, add them to `.prettierignore`.
 
 ### GitHub Action for Pull Request validation
 
