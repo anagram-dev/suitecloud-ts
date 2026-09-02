@@ -33,21 +33,21 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 - TypeScript and JavaScript files are compiled into the native `FileCabinet` folder
   expected by the CLI
 - TypeScript and JavaScript source co-exist in the same directory
-- No need to customize `object:import` when downloading files
-- TypeScript files won't be deployed to the File Cabinet
+- Native support for `object:import` of XML object files
+- TypeScript files aren't deployed to the File Cabinet
 - Compiled JavaScript files are ignored from Git
-- Developer is warned whenever a file may be downloaded/created in the ignored folder
-- Allows incremental adoption of TypeScript into existing JavaScript projects by
-  supporting import of JavaScript files from TypeScript
+- Developer is warned whenever a JavaScript file may be imported/created in the ignored folder
+- Supports import of JavaScript files from TypeScript, allowing incremental adoption
+  of TypeScript into existing JavaScript projects
 - Includes NetSuite types via 3rd-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
-- TypeScript v7 for better performance and future support
-- Support bundling third-party libraries into SuiteScript-compatible AMD modules
+- TypeScript v7 for better performance and long-term support
+- Support bundling third-party NPM libraries into SuiteScript-compatible AMD modules
 
 ### Quality-of-life features
 
 - ESLint with TypeScript support and `requirejs` rules for plain JavaScript files
 - Prettier formatting
-- Includes GitHub Action for PR validation
+- Includes GitHub Action for Pull Request validation
 - Pre-commit hooks for linting, format and conventional commit message
 - NVM support via `.nvmrc` file
 - Nix flake configuration with `direnv` support for dev shell
