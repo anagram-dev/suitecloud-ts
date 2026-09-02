@@ -53,7 +53,7 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 - Nix flake configuration with `direnv` support for dev shell
 
 All of these are enabled by default, but can be left unused if desired. See
-[Ignoring Quality-of-life Features](#ignoring-quality-of-life-features).
+[Disabling Quality-of-life Features](#disabling-quality-of-life-features).
 
 ## Usage
 
@@ -95,12 +95,15 @@ suitecloud project:deploy
     npm install
     ```
 
-### Ignoring Quality-of-life Features
+### Disabling Quality-of-life Features
 
 Every quality-of-life feature is enabled by default, but none of them are required. They stay out
 of the build: `build` doesn't invoke any of them, and the SuiteCloud CLI hooks only call
 `clean`, `build` and `test`. Leaving one unused costs nothing, and builds and deployments keep
 working either way.
+
+If any feature is not needed, it can be disabled or ignored by following the instructions
+described below for each.
 
 #### ESLint
 
