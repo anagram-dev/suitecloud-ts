@@ -193,22 +193,22 @@ The pipeline works around this by having `tsc` emit ESNext modules into an inter
 `build/` directory, then passing that output through Rollup to produce the AMD bundles
 that NetSuite expects.
 
-The `npm run build` command runs `build:ts` and `build:js` concurrently. `build:ts`
-chains two sequential steps; `build:js` runs independently in parallel:
+The `npm run build` command runs `build:ts` and `build:static` concurrently. `build:ts`
+chains two sequential steps; `build:static` runs independently in parallel:
 
 ```mermaid
 flowchart TD
     START["src/SuiteScripts/**/*.{js,ts}\n(TS and AMD)"]
     TS["src/SuiteScripts/**/*.ts\n(TS)"]
-    JS["src/SuiteScripts/**/*.js\n(AMD)"]
+    STATIC["src/SuiteScripts/**/*.!(ts)\n(AMD and assets)"]
     BUILD["build/**/*.js\n(ESNext)"]
     FC["src/FileCabinet/SuiteScripts/**/*.js\n(AMD)"]
 
     START -->|"build:ts"| TS
-    START -->|"build:js"| JS
+    START -->|"build:static"| STATIC
     TS -->|"build:ts:compile\ntsc"| BUILD
     BUILD -->|"build:ts:bundle\nrollup → AMD"| FC
-    JS -->|"build:js\ncopyfiles"| FC
+    STATIC -->|"build:static\ncopyfiles"| FC
 ```
 
 ### `build:ts:compile` - TypeScript compilation
@@ -235,11 +235,11 @@ structure. Several inline plugins handle NetSuite-specific concerns:
 - Move `@NApiVersion`/`@NScriptType` JSDoc comments back to the top of each file,
   because Rollup's AMD wrapper would place them inside `define()`.
 
-### `build:js` - Static JS copy
+### `build:static` - Static file copy
 
-Runs concurrently with `build:ts`. Plain JavaScript files under `src/SuiteScripts/`
-(existing AMD scripts not managed by tsc) are copied directly into `src/FileCabinet/SuiteScripts/`
-with `copyfiles`.
+Runs concurrently with `build:ts`. Every non-TypeScript file under `src/SuiteScripts/`
+(existing AMD scripts not managed by tsc, plus any other assets such as HTML templates or JSON)
+is copied directly into `src/FileCabinet/SuiteScripts/` with `copyfiles`.
 
 ## Library Bundler
 
