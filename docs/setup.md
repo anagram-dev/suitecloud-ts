@@ -10,7 +10,7 @@
 
     - Node.js v22
     - Oracle JDK or OpenJDK v21
-    - `@oracle/suitecloud-cli` [NPM package](https://www.npmjs.com/package/@oracle/suitecloud-cli)
+    - `@oracle/suitecloud-cli` [npm package](https://www.npmjs.com/package/@oracle/suitecloud-cli)
 
 3. Install dependencies using `npm`:
 

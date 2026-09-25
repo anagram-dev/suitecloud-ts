@@ -1,6 +1,6 @@
 # suitecloud-ts
 
-Scaffolding and boilerplate for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
+Boilerplate for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ for everyone to use. For example:
 
 - TypeScript and JavaScript sources co-exist, so existing projects can adopt TypeScript one file
   at a time.
-- Third-party NPM libraries can be bundled into SuiteScript-compatible AMD modules.
+- Third-party npm libraries can be bundled into SuiteScript-compatible AMD modules.
 - TypeScript v7 brings better performance and long-term support, and a Rollup step produces the
   AMD modules it can no longer emit (see [Build Pipeline](docs/build-pipeline.md)).
 
@@ -53,7 +53,7 @@ outlast this repository and reach every SuiteCloud project.
 - NetSuite types via the 3rd-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
 - SuiteCloud CLI commands work as usual, with the build running automatically before each deploy
 - Native support for `object:import` of XML object files
-- Support bundling third-party NPM libraries into SuiteScript-compatible AMD modules
+- Support bundling third-party npm libraries into SuiteScript-compatible AMD modules
 
 ### Quality-of-life Features
 
@@ -127,7 +127,7 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 - [Usage](docs/usage.md): day-to-day commands, `npm` scripts and SuiteCloud CLI hooks.
 - [Project Structure](docs/project-structure.md): folder layout and where to put each file.
 - [Build Pipeline](docs/build-pipeline.md): how TypeScript is compiled and bundled into AMD modules.
-- [Library Bundler](docs/library-bundler.md): how to bundle third-party NPM libraries.
+- [Library Bundler](docs/library-bundler.md): how to bundle third-party npm libraries.
 - [Disabling Quality-of-life Features](docs/disabling-features.md): how to turn off optional
   tooling.
 

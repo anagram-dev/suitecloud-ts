@@ -55,10 +55,10 @@ account.
 - The compiler runs in `strict` mode with `exactOptionalPropertyTypes`. Pass `undefined` explicitly
   only where a type allows it.
 - The target is ES2023, which is what SuiteScript 2.1 supports. Don't use newer syntax or APIs.
-- Prefer `N/*` modules and plain TypeScript over NPM packages. Suggest a new package only when it
+- Prefer `N/*` modules and plain TypeScript over npm packages. Suggest a new package only when it
   replaces a lot of manual implementation, as Zod does for data validation. Don't add it
   without the user's approval.
-- NetSuite can't resolve NPM packages at runtime, so a suggested package must be bundled, never
+- NetSuite can't resolve npm packages at runtime, so a suggested package must be bundled, never
   imported directly. Bundle it as described in `docs/library-bundler.md`, then import it from
   `./lib/<package>`.
 
