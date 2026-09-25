@@ -41,8 +41,8 @@ AMD modules into `src/FileCabinet/SuiteScripts/`, preserving the original module
 structure. Several inline plugins handle NetSuite-specific concerns:
 
 - Mark all `N/*` imports as external so Rollup does not attempt to bundle them.
-- Rewrite `import * as x from 'N/...'` to `import x from 'N/...'` so Rollup can emit clean
-  AMD dependencies without interop boilerplate.
+- Rewrite `import * as x from 'N/...'` to `import x from 'N/...'` so Rollup can emit plain
+  AMD dependencies without its namespace interop helpers.
 - Mark relative imports that resolve to plain JS AMD files (not compiled by tsc) as external
   so they are not inlined. Those files are handled by the static copy step instead.
 - Move `@NApiVersion`/`@NScriptType` JSDoc comments back to the top of each file,
