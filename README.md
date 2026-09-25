@@ -92,18 +92,15 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
     git init
     ```
 
-2. Follow [Setup](docs/setup.md) to install the prerequisites and dependencies, and to
-   authenticate the SuiteCloud CLI.
-
-3. Rename the project:
+2. Rename the project:
 
     - Update `name`, `version`, `description`, `author` and `repository` in `package.json`.
     - Update `<projectname>` in `src/manifest.xml`.
 
-4. Replace this `README.md` with one for the new project. The files in `docs/` describe the
-   boilerplate itself, so they can stay as they are.
+3. Follow [Setup](docs/setup.md) to install the prerequisites and dependencies, and to
+   authenticate the SuiteCloud CLI.
 
-5. Replace the sample code with your own:
+4. Replace the sample code with your own:
 
     - `src/SuiteScripts/RL_Echo.ts` and `src/Objects/customscript_rl_echo.xml` are a sample RESTlet
       and its script object.
@@ -115,8 +112,11 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 
     `AGENTS.md` points at some of these files as examples, so update it after removing them.
 
-6. Optionally, disable any [quality-of-life features](docs/disabling-features.md) the project
+5. Optionally, disable any [quality-of-life features](docs/disabling-features.md) the project
    doesn't need.
+
+6. Replace this `README.md` with one for the new project. The files in `docs/` describe the
+   boilerplate itself, so they can stay as they are.
 
 ## Documentation
 
