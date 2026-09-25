@@ -9,6 +9,7 @@ Scaffolding and boilerplate for using TypeScript v7+ in SuiteCloud Account Custo
 - [How It Works](#how-it-works)
 - [Getting Started](#getting-started)
 - [Documentation](#documentation)
+- [License](#license)
 
 ## Motivation
 
@@ -94,8 +95,10 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 
 2. Rename the project:
 
-    - Update `name`, `version`, `description`, `author` and `repository` in `package.json`.
+    - Update `name`, `version`, `description`, `author`, `license` and `repository` in
+      `package.json`.
     - Update `<projectname>` in `src/manifest.xml`.
+    - Replace `LICENSE` with the new project's license, or delete it (see [License](#license)).
 
 3. Follow [Setup](docs/setup.md) to install the prerequisites and dependencies, and to
    authenticate the SuiteCloud CLI.
@@ -127,3 +130,15 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 - [Library Bundler](docs/library-bundler.md): how to bundle third-party NPM libraries.
 - [Disabling Quality-of-life Features](docs/disabling-features.md): how to turn off optional
   tooling.
+
+## License
+
+This boilerplate is licensed under [MIT No Attribution](LICENSE) (`MIT-0`). Projects created from
+it don't need to keep the copyright notice or credit this repository, though a link back is always
+appreciated.
+
+The agent skills in `.agents/skills/` and `.claude/skills/` that come from
+[`oracle/netsuite-suitecloud-sdk`](https://github.com/oracle/netsuite-suitecloud-sdk) are Copyright
+(c) 2019, 2023 Oracle and/or its affiliates, and remain under the
+[Universal Permissive License 1.0](https://github.com/oracle/netsuite-suitecloud-sdk/blob/master/LICENSE.txt)
+(`UPL-1.0`).

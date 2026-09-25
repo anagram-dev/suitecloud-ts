@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "SuiteCloud Account Customization Project with TypeScript support",
   "author": "Joaquin Gatica <joaquin@anagram.dev>",
+  "license": "MIT-0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anagram-dev/suitecloud-ts.git"
