@@ -9,6 +9,8 @@ proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsu
 
 ```text
 /
+├ .agents/skills/         # NetSuite agent skills vendored from oracle/netsuite-suitecloud-sdk
+├ .claude/skills/         # symlinks to .agents/skills/ for Claude Code
 ├ .github/workflows       # github actions
 ├ __tests__/              # jest tests
 ├ lib/                    # entry points for Zod and other 3rd-party libs for bundling
@@ -19,6 +21,8 @@ proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsu
 │ ├ SuiteScripts/         # TS and JS source files, not deployed to NetSuite
 │ ├ deploy.xml
 │ └ manifest.xml
+├ AGENTS.md               # instructions for AI coding agents
+├ CLAUDE.md               # imports AGENTS.md for Claude Code
 └ ...                     # project, build, bundle and SuiteCloud configuration files
 ```
 
@@ -49,6 +53,8 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 - Prettier formatting
 - Includes GitHub Action for Pull Request validation
 - Pre-commit hooks for linting, format and conventional commit message
+- `AGENTS.md` and `CLAUDE.md` instructions for AI coding agents
+- Relevant subset of [`suitecloud-sdk` agent skills](https://github.com/oracle/netsuite-suitecloud-sdk/tree/master/packages/agent-skills)
 - NVM support via `.nvmrc` file
 - Nix flake configuration with `direnv` support for dev shell
 
@@ -148,6 +154,36 @@ Deleting both is the recommended way to turn off git hooks entirely. Husky can s
 no hook files present: its wrapper exits early when a hook has no matching file, so commits run
 without it, and `npm install` leaves the deletions alone. Restoring a hook later is a matter of
 writing the file back.
+
+#### AI agent instructions
+
+Only AI coding agents read these files, so they can stay in the repository unused. To remove the
+agent instructions, delete both files. Keeping only `CLAUDE.md` doesn't work, since it
+imports `AGENTS.md`:
+
+```bash
+rm AGENTS.md CLAUDE.md
+```
+
+#### AI agent skills
+
+Only AI coding agents read these files. The build, ESLint and Prettier all
+ignore `.agents/` and `.claude/`, so they can stay in the repository unused.
+
+To remove a single skill, delete its folder, its symlink and its entry in `skills-lock.json`:
+
+```bash
+rm -r .agents/skills/<skill> .claude/skills/<skill>
+```
+
+To remove every skill, delete both skill folders and the lock file:
+
+```bash
+rm -r .agents/skills .claude/skills skills-lock.json
+```
+
+After removing every skill, drop the line in `AGENTS.md` that tells agents not to edit
+`.agents/skills/` or `.claude/skills/`.
 
 #### NVM support
 
