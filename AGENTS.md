@@ -1,8 +1,8 @@
 # AGENTS.md
 
 This is a SuiteCloud Account Customization Project (ACP) written in TypeScript and JavaScript. Read
-`README.md` for the folder structure, build pipeline and library bundler. This file lists the rules
-for working in the project.
+`docs/project-structure.md`, `docs/build-pipeline.md` and `docs/library-bundler.md` for the folder
+structure, build pipeline and library bundler. This file lists the rules for working in the project.
 
 ## Where to Make Changes
 
@@ -59,8 +59,8 @@ account.
   replaces a lot of manual implementation, as Zod does for data validation. Don't add it
   without the user's approval.
 - NetSuite can't resolve NPM packages at runtime, so a suggested package must be bundled, never
-  imported directly. Bundle it as described in the README's `Library Bundler` section, then import
-  it from `./lib/<package>`.
+  imported directly. Bundle it as described in `docs/library-bundler.md`, then import it from
+  `./lib/<package>`.
 
 ## Writing JavaScript SuiteScripts
 

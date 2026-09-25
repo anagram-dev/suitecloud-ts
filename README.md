@@ -5,24 +5,10 @@ Scaffolding and boilerplate for using TypeScript v7+ in SuiteCloud Account Custo
 ## Table of Contents
 
 - [Motivation](#motivation)
-- [Folder Structure](#folder-structure)
 - [Features](#features)
-    - [Main features](#main-features)
-    - [Quality-of-life Features](#quality-of-life-features)
-- [Usage](#usage)
-    - [Basic Usage](#basic-usage)
-    - [Scripts](#scripts)
-- [Setup](#setup)
-    - [Install](#install)
-    - [Disabling Quality-of-life Features](#disabling-quality-of-life-features)
-- [SuiteCloud CLI Hooks](#suitecloud-cli-hooks)
-- [Build Pipeline](#build-pipeline)
-    - [`build:ts:compile` - TypeScript compilation](#buildtscompile---typescript-compilation)
-    - [`build:ts:bundle` - Rollup bundling](#buildtsbundle---rollup-bundling)
-    - [`build:static` - Static file copy](#buildstatic---static-file-copy)
-- [Library Bundler](#library-bundler)
-    - [How it works](#how-it-works)
-    - [Bundling a new library](#bundling-a-new-library)
+- [How It Works](#how-it-works)
+- [Getting Started](#getting-started)
+- [Documentation](#documentation)
 
 ## Motivation
 
@@ -40,7 +26,7 @@ for everyone to use. For example:
   at a time.
 - Third-party NPM libraries can be bundled into SuiteScript-compatible AMD modules.
 - TypeScript v7 brings better performance and long-term support, and a Rollup step produces the
-  AMD modules it can no longer emit (see [Build Pipeline](#build-pipeline)).
+  AMD modules it can no longer emit (see [Build Pipeline](docs/build-pipeline.md)).
 
 Static checks benefit everyone working on the project, including AI coding agents, which work best
 when each check gives them a fast, deterministic signal to verify their own changes. Agents also
@@ -56,46 +42,16 @@ demonstrates one of the alternatives proposed in
 The hope is that ideas proven here make their way into the SuiteCloud CLI itself, so their effects
 outlast this repository and reach every SuiteCloud project.
 
-## Folder Structure
-
-```text
-/
-├ .agents/skills/         # NetSuite agent skills vendored from oracle/netsuite-suitecloud-sdk
-├ .claude/skills/         # symlinks to .agents/skills/ for Claude Code
-├ .github/workflows       # github actions
-├ __tests__/              # jest tests
-├ lib/                    # entry points for Zod and other 3rd-party libs for bundling
-├ src/                    # folder used as `defaultProjectFolder` in suitecloud.config.js
-│ ├ FileCabinet/          # standard folder expected by the SuiteCloud CLI
-│ │ └ ...                 # folders expected by the SuiteCloud CLI except SuiteScripts (i.e. Templates)
-│ ├ Objects/              # SuiteCloud XML objects
-│ ├ SuiteScripts/         # TS and JS source files, not deployed to NetSuite
-│ ├ deploy.xml
-│ └ manifest.xml
-├ AGENTS.md               # instructions for AI coding agents
-├ CLAUDE.md               # imports AGENTS.md for Claude Code
-└ ...                     # project, build, bundle and SuiteCloud configuration files
-```
-
-TypeScript source files sit inside `defaultProjectFolder` (i.e. `src/`) but outside `FileCabinet/`.
-The TypeScript compiler outputs compiled JS directly into `src/FileCabinet/SuiteScripts/`, which is
-what gets deployed to the File Cabinet, and is ignored from Git.
-
 ## Features
 
 ### Main features
 
-- TypeScript and JavaScript files are compiled into the native `FileCabinet` folder
-  expected by the CLI
-- TypeScript and JavaScript source co-exist in the same directory
-- Native support for `object:import` of XML object files
-- TypeScript files aren't deployed to the File Cabinet
-- Compiled JavaScript files are ignored from Git
-- Developer is warned whenever a JavaScript file may be imported/created in the ignored folder
-- Supports import of JavaScript files from TypeScript, allowing incremental adoption
-  of TypeScript into existing JavaScript projects
-- Includes NetSuite types via 3rd-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
 - TypeScript v7 for better performance and long-term support
+- TypeScript and JavaScript sources co-exist, and TypeScript can import JavaScript, allowing
+  incremental adoption of TypeScript into existing JavaScript projects
+- NetSuite types via the 3rd-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
+- SuiteCloud CLI commands work as usual, with the build running automatically before each deploy
+- Native support for `object:import` of XML object files
 - Support bundling third-party NPM libraries into SuiteScript-compatible AMD modules
 
 ### Quality-of-life Features
@@ -110,294 +66,65 @@ what gets deployed to the File Cabinet, and is ignored from Git.
 - Nix flake configuration with `direnv` support for dev shell
 
 All of these are enabled by default, but can be left unused if desired. See
-[Disabling Quality-of-life Features](#disabling-quality-of-life-features).
+[Disabling Quality-of-life Features](docs/disabling-features.md).
 
-## Usage
+## How It Works
 
-### Basic Usage
+TypeScript and JavaScript sources live in `src/SuiteScripts/`, outside the `FileCabinet/` folder
+that the SuiteCloud CLI deploys. The build compiles them into `src/FileCabinet/SuiteScripts/`, so
+TypeScript files are never deployed and compiled output stays out of Git. See
+[Project Structure](docs/project-structure.md) for the full layout.
 
-After the initial [Setup](#setup), run deployments and other SuiteCloud CLI
-commands as usual. The build runs automatically before each command.
+Since TypeScript 7 no longer emits AMD modules, `tsc` compiles to ESNext and Rollup bundles the
+result into the AMD modules NetSuite expects. Hooks in `suitecloud.config.js` run this build before
+the SuiteCloud CLI deploys, validates, packages or uploads files. See
+[Build Pipeline](docs/build-pipeline.md) for each step.
 
-```bash
-suitecloud project:deploy
-```
+## Getting Started
 
-### Scripts
-
-| Script                            | Description                                               |
-| --------------------------------- | --------------------------------------------------------- |
-| `npm run build`                   | Compile TypeScript and copy static files to `FileCabinet` |
-| `npm run bundle:lib`              | Bundle third-party libraries into `src/SuiteScripts/lib/` |
-| `npm run clean`                   | Remove compiled output from `FileCabinet/SuiteScripts`    |
-| `npm run lint` / `lint:fix`       | Lint the project or auto-fix linting issues               |
-| `npm run format` / `format:check` | Format or check format with Prettier                      |
-| `npm test`                        | Run unit tests with Jest                                  |
-
-## Setup
-
-### Install
-
-1. (Optional) If using `nix` and `direnv`, make sure flakes are enabled, and run:
+1. Copy the boilerplate into a new folder and start a fresh Git history. Git has to exist before
+   `npm install`, since it sets up the pre-commit hooks:
 
     ```bash
-    direnv allow
+    git clone --depth 1 https://github.com/anagram-dev/suitecloud-ts.git my-project
+    cd my-project
+    rm -rf .git
+    git init
     ```
 
-2. If not using `nix`, make sure that the following are installed globally:
+2. Follow [Setup](docs/setup.md) to install the prerequisites and dependencies, and to
+   authenticate the SuiteCloud CLI.
 
-    - Node.js v22
-    - Oracle JDK or OpenJDK v21
-    - `@oracle/suitecloud-cli` [NPM package](https://www.npmjs.com/package/@oracle/suitecloud-cli)
+3. Rename the project:
 
-3. Install dependencies using `npm`:
+    - Update `name`, `version`, `description`, `author` and `repository` in `package.json`.
+    - Update `<projectname>` in `src/manifest.xml`.
 
-    ```bash
-    npm install
-    ```
+4. Replace this `README.md` with one for the new project. The files in `docs/` describe the
+   boilerplate itself, so they can stay as they are.
 
-### Disabling Quality-of-life Features
+5. Replace the sample code with your own:
 
-Every quality-of-life feature is enabled by default, but none of them are required. They stay out
-of the build: `build` doesn't invoke any of them, and the SuiteCloud CLI hooks only call
-`clean`, `build` and `test`. Leaving one unused costs nothing, and builds and deployments keep
-working either way.
+    - `src/SuiteScripts/RL_Echo.ts` and `src/Objects/customscript_rl_echo.xml` are a sample RESTlet
+      and its script object.
+    - `src/SuiteScripts/utils/` holds the sample's error and response helpers.
+    - `__tests__/sample-test.js` is a sample Jest test. Keep at least one test, since Jest fails
+      when it finds none and `project:deploy` runs the tests.
+    - Zod is bundled as a sample library. To remove it, delete `lib/zod.ts`,
+      `src/SuiteScripts/lib/zod.*` and its entries in `rollup.config.lib.mjs`, then run
+      `npm uninstall zod`.
 
-If any feature is not needed, it can be disabled or ignored by following the instructions
-described below for each.
+    `AGENTS.md` points at some of these files as examples, so update it after removing them.
 
-#### ESLint
+6. Optionally, disable any [quality-of-life features](docs/disabling-features.md) the project
+   doesn't need.
 
-Don't run `npm run lint`. The only other things that invoke it are the pre-commit hook and the
-GitHub Action, both covered below.
+## Documentation
 
-To silence it in an editor that lints automatically, add paths to the `ignores` array in
-`eslint.config.mjs`, or disable the ESLint extension for this workspace.
-
-#### Prettier
-
-Don't run `npm run format`. Formatting is enforced by `npm run lint`, the pre-commit hook and the
-GitHub Action, since ESLint reports Prettier violations as lint errors through
-`eslint-plugin-prettier`.
-
-To exempt specific files, add them to `.prettierignore`.
-
-#### GitHub Action for Pull Request validation
-
-The workflow only triggers on `pull_request`, so it never runs locally.
-
-To drop an individual check, remove its step from `.github/workflows/validate.yaml`. The
-`Check Format`, `Lint` and `Test` steps can each go on their own; the rest set up the job.
-
-If the repository will be hosted in GitHub, but no GitHub Actions are needed at all,
-delete `.github/workflows/validate.yaml`. If hosted elsewhere, then the GitHub Actions will be
-ignored.
-
-#### Pre-commit hooks
-
-The `pre-commit` hook runs `lint-staged` and the `commit-msg` hook runs `commitlint`. They are
-independent, so either can be disabled on its own.
-
-Disable a hook by deleting its file:
-
-```bash
-rm .husky/pre-commit    # lint and format staged files
-rm .husky/commit-msg    # conventional commit message validation
-```
-
-Deleting both is the recommended way to turn off git hooks entirely. Husky can stay installed with
-no hook files present: its wrapper exits early when a hook has no matching file, so commits run
-without it, and `npm install` leaves the deletions alone. Restoring a hook later is a matter of
-writing the file back.
-
-#### AI agent instructions
-
-Only AI coding agents read these files, so they can stay in the repository unused. To remove the
-agent instructions, delete both files. Keeping only `CLAUDE.md` doesn't work, since it
-imports `AGENTS.md`:
-
-```bash
-rm AGENTS.md CLAUDE.md
-```
-
-#### AI agent skills
-
-Only AI coding agents read these files. The build, ESLint and Prettier all
-ignore `.agents/` and `.claude/`, so they can stay in the repository unused.
-
-To remove a single skill, delete its folder, its symlink and its entry in `skills-lock.json`:
-
-```bash
-rm -r .agents/skills/<skill> .claude/skills/<skill>
-```
-
-To remove every skill, delete both skill folders and the lock file:
-
-```bash
-rm -r .agents/skills .claude/skills skills-lock.json
-```
-
-After removing every skill, drop the line in `AGENTS.md` that tells agents not to edit
-`.agents/skills/` or `.claude/skills/`.
-
-#### NVM support
-
-`.nvmrc` is only read when you run `nvm use`, so ignoring it means not running that command. Any
-Node.js v22 install works, whether from `nvm`, `nix`, Homebrew or a system package.
-
-The GitHub Action reads the same file via `node-version-file`, which is what keeps CI aligned
-with local development.
-
-#### Nix flake and `direnv`
-
-Don't run `direnv allow`, and the flake is never evaluated. If the shell is already active, run
-`direnv deny` to unload it.
-
-In that case, install the appropriate Node.js and OpenJDK versions by whatever means you prefer,
-as described in [Setup](#setup). The flake files can stay in the repository unused.
-
-## SuiteCloud CLI Hooks
-
-`suitecloud.config.js` hooks into several SuiteCloud CLI commands via `beforeExecuting` to automate
-the build and keep the developer experience consistent:
-
-| Command            | Hook behavior                            |
-| ------------------ | ---------------------------------------- |
-| `project:deploy`   | Runs build and tests                     |
-| `project:validate` | Runs build                               |
-| `project:package`  | Runs build                               |
-| `file:upload`      | Runs build                               |
-| `file:create`      | Prints a note to move generated JS files |
-| `file:import`      | Prints a note to move generated JS files |
-| `object:import`    | Prints a note to move generated JS files |
-| `object:update`    | Prints a note to move generated JS files |
-
-Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
-print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
-build pipeline rather than overwritten by the next build.
-
-## Build Pipeline
-
-SuiteScript files must be delivered as AMD modules, but [TypeScript 7 dropped the
-`module: "amd"` compiler option](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#updates-since-5.x-and-new-behaviors-from-6.0).
-The pipeline works around this by having `tsc` emit ESNext modules into an intermediate
-`build/` directory, then passing that output through Rollup to produce the AMD bundles
-that NetSuite expects.
-
-The `npm run build` command runs `build:ts` and `build:static` concurrently. `build:ts`
-chains two sequential steps; `build:static` runs independently in parallel:
-
-```mermaid
-flowchart TD
-    START["src/SuiteScripts/**/*.{js,ts}\n(TS and AMD)"]
-    TS["src/SuiteScripts/**/*.ts\n(TS)"]
-    STATIC["src/SuiteScripts/**/*.!(ts)\n(AMD and assets)"]
-    BUILD["build/**/*.js\n(ESNext)"]
-    FC["src/FileCabinet/SuiteScripts/**/*.js\n(AMD)"]
-
-    START -->|"build:ts"| TS
-    START -->|"build:static"| STATIC
-    TS -->|"build:ts:compile\ntsc"| BUILD
-    BUILD -->|"build:ts:bundle\nrollup → AMD"| FC
-    STATIC -->|"build:static\ncopyfiles"| FC
-```
-
-### `build:ts:compile` - TypeScript compilation
-
-TypeScript 7 compiles `src/SuiteScripts/**/*.ts` into `build/` using `tsconfig.build.json`.
-The output format is ESNext with ES modules (`module: "esnext"`), producing clean
-intermediate JS before any bundling. NetSuite's `N/*` module paths are left as bare imports at this stage.
-
-> **Note:** TypeScript 7 is installed as `typescript7` (aliased from `npm:typescript@^7`) to
-> avoid conflicting with the `typescript` package, which remains at v6 so that
-> `typescript-eslint` (which does not yet support TypeScript 7) continues to work.
-
-### `build:ts:bundle` - Rollup bundling
-
-Runs after `build:ts:compile`. Rollup picks up every file in `build/` and outputs
-AMD modules into `src/FileCabinet/SuiteScripts/`, preserving the original module
-structure. Several inline plugins handle NetSuite-specific concerns:
-
-- Mark all `N/*` imports as external so Rollup does not attempt to bundle them.
-- Rewrite `import * as x from 'N/...'` to `import x from 'N/...'` so Rollup can emit clean
-  AMD dependencies without interop boilerplate.
-- Mark relative imports that resolve to plain JS AMD files (not compiled by tsc) as external
-  so they are not inlined. Those files are handled by the static copy step instead.
-- Move `@NApiVersion`/`@NScriptType` JSDoc comments back to the top of each file,
-  because Rollup's AMD wrapper would place them inside `define()`.
-
-### `build:static` - Static file copy
-
-Runs concurrently with `build:ts`. Every non-TypeScript file under `src/SuiteScripts/`
-(existing AMD scripts not managed by tsc, plus any other assets such as HTML templates or JSON)
-is copied directly into `src/FileCabinet/SuiteScripts/` with `copyfiles`.
-
-## Library Bundler
-
-Third-party npm packages cannot be loaded directly in SuiteScript, since it expects AMD modules
-served from the File Cabinet. The library bundler pre-bundles selected packages into self-contained
-AMD files that can be uploaded and imported like any other SuiteScript file.
-
-### How it works
-
-Each library gets a small entrypoint in `lib/` that re-exports the public API, for example:
-
-```ts
-// lib/zod.ts
-export { z as default } from 'zod';
-```
-
-Running `npm run bundle:lib` processes every entrypoint in `lib/` through Rollup
-(`rollup.config.lib.mjs`) and writes two output files per library into `src/SuiteScripts/lib/`:
-
-- **`<package>.js`** — the full library bundled as an AMD module, ready for the File Cabinet
-- **`<package>.d.ts`** — bundled type declarations for use during TypeScript development
-
-Both output files should be committed to the repository. They are consumed directly by the TypeScript
-build pipeline, and no build step is required for day-to-day development after the initial bundle.
-
-### Bundling a new library
-
-1. Install the package as a dev dependency:
-
-    ```bash
-    npm install --save-dev <package>
-    ```
-
-2. Create an entrypoint in `lib/` that exports the API your scripts will use, for example:
-
-    ```ts
-    // lib/<package>.ts
-    export { something as default } from '<package>';
-    ```
-
-3. Add two entries to the `export default` array in `rollup.config.lib.mjs`: one for the JS
-   bundle and one for the type declarations:
-
-    ```js
-    // JS bundle
-    {
-      input: `${dirs.entrypoints}/<package>.ts`,
-      output: { file: `${dirs.output}/<package>.js`, format: 'amd' },
-      plugins: [resolve()],
-    },
-    // Type declarations
-    {
-      input: `${dirs.entrypoints}/<package>.ts`,
-      output: { file: `${dirs.output}/<package>.d.ts`, format: 'es' },
-      plugins: [resolve(), dts({ respectExternal: true })],
-    },
-    ```
-
-4. Run the bundler and commit the output:
-
-    ```bash
-    npm run bundle:lib
-    git add src/SuiteScripts/lib/<package>.js src/SuiteScripts/lib/<package>.d.ts
-    ```
-
-5. In your SuiteScript files, import the bundled library using its relative path:
-
-    ```ts
-    import name from './lib/<package>';
-    ```
+- [Setup](docs/setup.md): prerequisites, dependencies and SuiteCloud CLI authentication.
+- [Usage](docs/usage.md): day-to-day commands, `npm` scripts and SuiteCloud CLI hooks.
+- [Project Structure](docs/project-structure.md): folder layout and where to put each file.
+- [Build Pipeline](docs/build-pipeline.md): how TypeScript is compiled and bundled into AMD modules.
+- [Library Bundler](docs/library-bundler.md): how to bundle third-party NPM libraries.
+- [Disabling Quality-of-life Features](docs/disabling-features.md): how to turn off optional
+  tooling.
