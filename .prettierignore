@@ -5,3 +5,5 @@ src/manifest.xml
 src/FileCabinet/SuiteScripts
 src/SuiteScripts/lib
 build
+.agents
+.claude

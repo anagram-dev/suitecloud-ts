@@ -1,32 +1,34 @@
 import js from '@eslint/js'
 import json from '@eslint/json'
 import markdown from '@eslint/markdown'
-import { defineConfig } from 'eslint/config'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import jest from 'eslint-plugin-jest'
 import prettierRecommended from 'eslint-plugin-prettier/recommended'
 import requirejs from 'eslint-plugin-requirejs'
 import globals from 'globals'
 import typeScriptEslint from 'typescript-eslint'
 
-const distFiles = [
-  'build/**/*',
-  'src/FileCabinet/SuiteScripts/**/*',
-  'src/SuiteScripts/lib/**/*',
-]
 const commonJsFiles = ['jest.config.js', 'suitecloud.config.js']
 
 export default defineConfig([
+  globalIgnores([
+    '.agents',
+    '.claude',
+    'build/**/*',
+    'src/FileCabinet/SuiteScripts/**/*',
+    'src/SuiteScripts/lib/**/*',
+  ]),
   {
     // shared config for all JS files regardless of version or type
     files: ['**/*.{js,mjs,cjs}'],
-    ignores: [...distFiles],
+    ignores: [],
     plugins: { js },
     extends: ['js/recommended'],
   },
   {
     // config ESM files not using the mjs extension
     files: ['**/*.js'],
-    ignores: [...distFiles, ...commonJsFiles],
+    ignores: [...commonJsFiles],
     languageOptions: {
       sourceType: 'module',
       globals: {
@@ -40,7 +42,7 @@ export default defineConfig([
   {
     // config for JS files or utility scripts not using ESM
     files: [...commonJsFiles],
-    ignores: [...distFiles],
+    ignores: [],
     languageOptions: {
       sourceType: 'commonjs',
       globals: {
@@ -54,7 +56,7 @@ export default defineConfig([
   {
     // config for JavaScript SuiteScript files
     files: ['src/**/*.js'],
-    ignores: [...distFiles],
+    ignores: [],
     plugins: { requirejs },
     languageOptions: {
       // SuiteScript 2.1 supports ECMAScript 2023
@@ -97,7 +99,7 @@ export default defineConfig([
   {
     // config for TypeScript SuiteScript files
     files: ['src/**/*.ts'],
-    ignores: [...distFiles],
+    ignores: [],
     extends: [...typeScriptEslint.configs.recommended],
     languageOptions: {
       // SuiteScript 2.1 supports ECMAScript 2023
@@ -113,7 +115,7 @@ export default defineConfig([
   {
     // config for test JS files
     files: ['**/__tests__/**/*.js'],
-    ignores: [...distFiles],
+    ignores: [],
     plugins: { jest },
     languageOptions: { globals: jest.environments.globals.globals },
   },
