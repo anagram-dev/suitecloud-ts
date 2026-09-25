@@ -183,7 +183,7 @@ the build and keep the developer experience consistent:
 
 Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`, `object:update`)
 print a reminder to move any downloaded JS files into `src/SuiteScripts/` so they are managed by the
-build pipeline rather overritten by the next build.
+build pipeline rather than overwritten by the next build.
 
 ## Build Pipeline
 
@@ -231,8 +231,8 @@ structure. Several inline plugins handle NetSuite-specific concerns:
 - Rewrite `import * as x from 'N/...'` to `import x from 'N/...'` so Rollup can emit clean
   AMD dependencies without interop boilerplate.
 - Mark relative imports that resolve to plain JS AMD files (not compiled by tsc) as external
-  so they are not inlined.Tthose files are handled by the static copy step instead.
-- Moves `@NApiVersion`/`@NScriptType` JSDoc comments back to the top of each file,
+  so they are not inlined. Those files are handled by the static copy step instead.
+- Move `@NApiVersion`/`@NScriptType` JSDoc comments back to the top of each file,
   because Rollup's AMD wrapper would place them inside `define()`.
 
 ### `build:js` - Static JS copy
