@@ -2,8 +2,59 @@
 
 Scaffolding and boilerplate for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
 
-Additionally, this project demonstrates **Option 3** of the folder structure alternatives
-proposed in [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976).
+## Table of Contents
+
+- [Motivation](#motivation)
+- [Folder Structure](#folder-structure)
+- [Features](#features)
+    - [Main features](#main-features)
+    - [Quality-of-life Features](#quality-of-life-features)
+- [Usage](#usage)
+    - [Basic Usage](#basic-usage)
+    - [Scripts](#scripts)
+- [Setup](#setup)
+    - [Install](#install)
+    - [Disabling Quality-of-life Features](#disabling-quality-of-life-features)
+- [SuiteCloud CLI Hooks](#suitecloud-cli-hooks)
+- [Build Pipeline](#build-pipeline)
+    - [`build:ts:compile` - TypeScript compilation](#buildtscompile---typescript-compilation)
+    - [`build:ts:bundle` - Rollup bundling](#buildtsbundle---rollup-bundling)
+    - [`build:static` - Static file copy](#buildstatic---static-file-copy)
+- [Library Bundler](#library-bundler)
+    - [How it works](#how-it-works)
+    - [Bundling a new library](#bundling-a-new-library)
+
+## Motivation
+
+This project aims to improve the experience of developing for NetSuite with SuiteCloud. Static
+checks catch mistakes before they reach NetSuite, where finding them usually means deploying and
+testing in an account. The SuiteCloud CLI already provides a testing framework with Jest, but
+leaves type checking, linting and formatting to the developer.
+
+There are multiple ways of closing this gap, and many developers have already done it in their own
+projects. This one picks one of those ways, wires TypeScript, ESLint and Prettier into the
+SuiteCloud CLI workflow, and takes it one step further as a fully fledged boilerplate that is open
+for everyone to use. For example:
+
+- TypeScript and JavaScript sources co-exist, so existing projects can adopt TypeScript one file
+  at a time.
+- Third-party NPM libraries can be bundled into SuiteScript-compatible AMD modules.
+- TypeScript v7 brings better performance and long-term support, and a Rollup step produces the
+  AMD modules it can no longer emit (see [Build Pipeline](#build-pipeline)).
+
+Static checks benefit everyone working on the project, including AI coding agents, which work best
+when each check gives them a fast, deterministic signal to verify their own changes. Agents also
+need project and NetSuite context. `AGENTS.md` tells them where to make changes and how to verify
+them, and `.agents/skills/` vendors a subset of the
+[NetSuite agent skills](https://github.com/oracle/netsuite-suitecloud-sdk) that Oracle publishes,
+covering topics such as SDF best practices, record field IDs and role permissions.
+
+Rather than becoming [one more competing standard](https://xkcd.com/927/), this project is also
+meant as a way of collaborating with the Oracle SuiteCloud team. Its folder structure, for example,
+demonstrates one of the alternatives proposed in
+[oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976).
+The hope is that ideas proven here make their way into the SuiteCloud CLI itself, so their effects
+outlast this repository and reach every SuiteCloud project.
 
 ## Folder Structure
 
@@ -63,6 +114,8 @@ All of these are enabled by default, but can be left unused if desired. See
 
 ## Usage
 
+### Basic Usage
+
 After the initial [Setup](#setup), run deployments and other SuiteCloud CLI
 commands as usual. The build runs automatically before each command.
 
@@ -82,6 +135,8 @@ suitecloud project:deploy
 | `npm test`                        | Run unit tests with Jest                                  |
 
 ## Setup
+
+### Install
 
 1. (Optional) If using `nix` and `direnv`, make sure flakes are enabled, and run:
 
