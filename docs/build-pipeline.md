@@ -32,9 +32,10 @@ are left as bare imports at this stage.
 
 > **Note:** TypeScript 7 is installed as `typescript7` (aliased from `npm:typescript@^7`) to
 > avoid conflicting with the `typescript` package, which remains at v6 so that
-> `typescript-eslint` (which does not yet support TypeScript 7) continues to work. Both packages
-> declare a `tsc` binary, so `node_modules/.bin/tsc` may point at either version. Scripts run
-> TypeScript 7 by its path through `npm run tsc7`.
+> `typescript-eslint` (which does not yet support TypeScript 7) continues to work.
+> `jest.transformer.mjs` also uses v6 for `transpileModule`, which TypeScript 7 doesn't provide in
+> its stable API. Both packages declare a `tsc` binary, so `node_modules/.bin/tsc` may point at
+> either version. Scripts run TypeScript 7 by its path through `npm run tsc7`.
 
 ## `build:ts:bundle` - Rollup bundling
 

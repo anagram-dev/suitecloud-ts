@@ -50,6 +50,8 @@ outlast this repository and reach every SuiteCloud project.
 - Native support for `object:import` of XML object files
 - Supports bundling third-party npm libraries into SuiteScript-compatible AMD modules, and fails the
   build on direct npm imports that NetSuite can't resolve
+- Jest tests in TypeScript or JavaScript, using the SuiteCloud `N/*` stubs and type checked like the
+  sources
 
 ### Quality-of-life Features
 
@@ -130,7 +132,7 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 ## Documentation
 
 - [Setup](docs/setup.md): prerequisites, dependencies and SuiteCloud CLI authentication.
-- [Usage](docs/usage.md): day-to-day commands, `npm` scripts and SuiteCloud CLI hooks.
+- [Usage](docs/usage.md): day-to-day commands, `npm` scripts, tests and SuiteCloud CLI hooks.
 - [Project Structure](docs/project-structure.md): folder layout and where to put each file.
 - [Build Pipeline](docs/build-pipeline.md): how TypeScript is compiled and bundled into AMD modules.
 - [Library Bundler](docs/library-bundler.md): how to bundle third-party npm libraries.

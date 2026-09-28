@@ -35,7 +35,31 @@ Tests live in `__tests__/` and can be written in TypeScript or JavaScript. Jest 
 
 Tests import sources from `src/SuiteScripts/` by relative path, so they don't need a build first.
 The SuiteCloud unit testing framework provides stubs for the `N/*` modules, which
-`jest.mock('N/record')` turns into mocks.
+`jest.mock('N/error')` turns into mocks. The stubs' functions return `undefined`, so a test mocks
+whatever return values the code under test needs. In TypeScript, `jest.mocked()` gives a mock its
+types:
+
+```ts
+import error from 'N/error';
+import { post } from '../src/SuiteScripts/RL_Echo';
+import { ErrorType } from '../src/SuiteScripts/utils/error';
+
+jest.mock('N/error');
+
+it('should reject an invalid body', () => {
+    jest.mocked(error.create).mockImplementation(({ name, message }) => ({
+        id: '1',
+        name,
+        message: String(message),
+        stack: [],
+        cause: undefined,
+    }));
+
+    expect(post({ echo: false })).toMatchObject({
+        status: ErrorType.BadRequest,
+    });
+});
+```
 
 The SuiteCloud Jest configuration only transforms JavaScript, so `jest.transformer.mjs` adds
 TypeScript support. It strips the types with `typescript` and passes the result to the SuiteCloud

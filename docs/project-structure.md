@@ -5,7 +5,7 @@
 ├ .agents/skills/         # NetSuite agent skills vendored from oracle/netsuite-suitecloud-sdk
 ├ .claude/skills/         # symlinks to .agents/skills/ for Claude Code
 ├ .github/workflows/      # GitHub Actions
-├ __tests__/              # Jest tests
+├ __tests__/              # Jest tests, with their own tsconfig.json
 ├ docs/                   # documentation for developers using the starter project
 ├ lib/                    # entry points for bundling third-party libraries such as Zod
 ├ src/                    # folder used as `defaultProjectFolder` in suitecloud.config.js
