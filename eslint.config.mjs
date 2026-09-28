@@ -8,7 +8,7 @@ import requirejs from 'eslint-plugin-requirejs'
 import globals from 'globals'
 import typeScriptEslint from 'typescript-eslint'
 
-const commonJsFiles = ['jest.config.js', 'suitecloud.config.js']
+const commonJsFiles = ['suitecloud.config.js']
 
 export default defineConfig([
   globalIgnores([
@@ -139,11 +139,17 @@ export default defineConfig([
     },
   },
   {
-    // config for test JS files
-    files: ['**/__tests__/**/*.js'],
+    // config for test files
+    files: ['**/__tests__/**/*.{js,ts}'],
     ignores: [],
     plugins: { jest },
     languageOptions: { globals: jest.environments.globals.globals },
+  },
+  {
+    // config for TypeScript test files
+    files: ['**/__tests__/**/*.ts'],
+    ignores: [],
+    extends: [...typeScriptEslint.configs.recommended],
   },
   {
     files: ['**/*.json'],
