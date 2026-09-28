@@ -29,9 +29,9 @@ suitecloud file:upload --paths /SuiteScripts/RL_Echo.js
 
 ## Tests
 
-Tests live in `__tests__/` and can be written in TypeScript or JavaScript. Jest runs every file in
-`__tests__/` except `.d.ts` files, so keep test helpers outside it. By convention, tests are named
-`<Module>.test.ts`, while `sample-test.js` keeps the name the SuiteCloud CLI gives it.
+Tests live in `__tests__/` and can be written in TypeScript or JavaScript. Jest runs every JS and TS
+file in `__tests__/` except `.d.ts` files, so keep test helpers outside it. By convention, tests are
+named `<Module>.test.ts`, while `sample-test.js` keeps the name the SuiteCloud CLI gives it.
 
 Tests import sources from `src/SuiteScripts/` by relative path, so they don't need a build first.
 The SuiteCloud unit testing framework provides stubs for the `N/*` modules, which

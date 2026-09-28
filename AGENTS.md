@@ -80,7 +80,8 @@ modules. See the Tests section of `docs/usage.md`.
 - Write new tests in TypeScript, named `<Module>.test.ts`, at the path that mirrors the source in
   `src/SuiteScripts/`. For example, `__tests__/utils/error.test.ts` tests
   `src/SuiteScripts/utils/error.js`.
-- Jest runs every file in `__tests__/` except `.d.ts` files, so keep test helpers outside it.
+- Jest runs every JS and TS file in `__tests__/` except `.d.ts` files, so keep test helpers
+  outside it.
 - Import sources from `src/SuiteScripts/` by relative path, never through the `SuiteScripts/`
   module name, which maps to the build output.
 - Mock a module with `jest.mock('N/record')`, and type its mocks with `jest.mocked(record.load)`.
