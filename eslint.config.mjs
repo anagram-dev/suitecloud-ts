@@ -8,7 +8,7 @@ import requirejs from 'eslint-plugin-requirejs'
 import globals from 'globals'
 import typeScriptEslint from 'typescript-eslint'
 
-const commonJsFiles = ['jest.config.js', 'suitecloud.config.js']
+const commonJsFiles = ['suitecloud.config.js']
 
 export default defineConfig([
   globalIgnores([
