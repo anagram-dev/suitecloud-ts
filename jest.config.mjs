@@ -13,6 +13,10 @@ export default {
     ...suiteCloudConfig.transform,
     '^.+\\.ts$': path.join(import.meta.dirname, 'jest.transformer.mjs'),
   },
-  testPathIgnorePatterns: ['/node_modules/', '\\.d\\.ts$'],
+  testMatch: [
+    '**/__tests__/**/*.test.[jt]s',
+    // Oracle's sample test, named as the SuiteCloud CLI scaffolds it
+    '**/__tests__/sample-test.js',
+  ],
   passWithNoTests: true,
 }

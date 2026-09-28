@@ -29,10 +29,14 @@ suitecloud file:upload --paths /SuiteScripts/RL_Echo.js
 
 ## Tests
 
-Tests live in `__tests__/` and can be written in TypeScript or JavaScript. They import sources
-from `src/SuiteScripts/` by relative path, so they don't need a build first. The SuiteCloud unit
-testing framework provides stubs for the `N/*` modules, which `jest.mock('N/record')` turns into
-mocks.
+Tests live in `__tests__/`, can be written in TypeScript or JavaScript, and are named
+`<Module>.test.ts` or `<Module>.test.js`. Jest only runs files with the `.test` suffix, so helpers
+and `.d.ts` files can sit next to them. `sample-test.js` keeps the name the SuiteCloud CLI gives
+it.
+
+Tests import sources from `src/SuiteScripts/` by relative path, so they don't need a build first.
+The SuiteCloud unit testing framework provides stubs for the `N/*` modules, which
+`jest.mock('N/record')` turns into mocks.
 
 The SuiteCloud Jest configuration only transforms JavaScript, so `jest.transformer.mjs` adds
 TypeScript support. It strips the types with `typescript` and passes the result to the SuiteCloud
@@ -40,7 +44,7 @@ transformer, which still hoists `jest.mock` calls above the imports. Jest doesn'
 tests. `npm run check` does, with `__tests__/tsconfig.json`.
 
 Some stubs, such as `N/record/instance`, have no types in `@hitc/netsuite-types`. To import one
-from a TypeScript test, declare it in a `.d.ts` file in `__tests__/`. Jest skips `.d.ts` files.
+from a TypeScript test, declare it in a `.d.ts` file in `__tests__/`.
 
 ## SuiteCloud CLI Hooks
 

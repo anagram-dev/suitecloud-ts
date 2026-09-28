@@ -77,8 +77,8 @@ account.
 Tests live in `__tests__/` and run on Jest with the SuiteCloud unit testing stubs for `N/*`
 modules. See the Tests section of `docs/usage.md`.
 
-- Write new tests in TypeScript, named `<Module>-test.ts`, at the path that mirrors the source in
-  `src/SuiteScripts/`. For example, `__tests__/utils/error-test.ts` tests
+- Write new tests in TypeScript, named `<Module>.test.ts`, at the path that mirrors the source in
+  `src/SuiteScripts/`. For example, `__tests__/utils/error.test.ts` tests
   `src/SuiteScripts/utils/error.js`.
 - Import sources from `src/SuiteScripts/` by relative path, never through the `SuiteScripts/`
   module name, which maps to the build output.

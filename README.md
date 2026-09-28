@@ -112,8 +112,9 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
     - `src/SuiteScripts/RL_Echo.ts` and `src/Objects/customscript_rl_echo.xml` are a sample RESTlet
       and its script object.
     - `src/SuiteScripts/utils/` holds the sample's error and response helpers.
-    - `__tests__/` holds the sample's tests. `RL_Echo-test.ts` and `utils/` mirror
-      `src/SuiteScripts/` in TypeScript, and `sample-test.js` is a JavaScript sample.
+    - `__tests__/` holds the sample's tests. `RL_Echo.test.ts` and `utils/` mirror
+      `src/SuiteScripts/` in TypeScript, and `sample-test.js` is the SuiteCloud CLI's JavaScript
+      sample.
     - Zod is bundled as a sample library. To remove it, delete `lib/zod.mjs`,
       `src/SuiteScripts/lib/zod.*` and its entries in `rollup.config.lib.mjs`, then run
       `npm uninstall zod`.
