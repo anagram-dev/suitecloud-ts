@@ -1,5 +1,5 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { globSync, existsSync } from 'node:fs'
+import { isBuiltin } from 'node:module'
 import { resolve, dirname, extname } from 'node:path'
 
 export default {
@@ -69,6 +69,23 @@ export default {
         return { code: `${dedentedBanner}\n${strippedCode}` }
       },
     },
-    nodeResolve(),
+    {
+      // NetSuite can't resolve npm packages at runtime, and resolving them here would emit their
+      //  files under `node_modules/`, so they must go through the library bundler instead.
+      name: 'reject-npm-imports',
+      resolveId(id, parentId) {
+        if (!parentId || /^[./]|^N(\/|$)/.test(id)) {
+          return null
+        }
+        if (isBuiltin(id)) {
+          this.error(
+            `"${id}" is a Node.js module, which NetSuite doesn't provide.`,
+          )
+        }
+        this.error(
+          `"${id}" is an npm package. Bundle it into \`src/SuiteScripts/lib/\` and import it from there. See docs/library-bundler.md.`,
+        )
+      },
+    },
   ],
 }

@@ -2,7 +2,9 @@
 
 Third-party npm packages cannot be loaded directly in SuiteScript, since it expects AMD modules
 served from the File Cabinet. The library bundler pre-bundles selected packages into self-contained
-AMD files that can be uploaded and imported like any other SuiteScript file.
+AMD files that can be uploaded and imported like any other SuiteScript file. The build and ESLint
+reject direct npm package imports in SuiteScript files, so every package has to go through the
+bundler.
 
 ## How It Works
 

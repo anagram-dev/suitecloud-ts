@@ -94,6 +94,16 @@ export default defineConfig([
       'requirejs/amd-function-arity': ['error'],
       'requirejs/sort-amd-paths': ['off'],
       'requirejs/no-restricted-amd-modules': ['error'],
+      'no-restricted-syntax': [
+        'error',
+        {
+          // NetSuite can't resolve npm packages at runtime. `requirejs/no-restricted-amd-modules`
+          //  can't express this, since its patterns throw on relative paths.
+          selector: String.raw`CallExpression[callee.name=/^(define|require)$/] > ArrayExpression > Literal[value=/^(?![.\/]|N(\/|$)|(exports|module|require)$)/], CallExpression[callee.name='require'] > Literal[value=/^(?![.\/]|N(\/|$)|(exports|module|require)$)/]`,
+          message:
+            'Bundle npm packages into `src/SuiteScripts/lib/` and import them from there. See docs/library-bundler.md.',
+        },
+      ],
     },
   },
   {
@@ -110,6 +120,22 @@ export default defineConfig([
         ...globals.es2023,
         ...globals.browser,
       },
+    },
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              // NetSuite can't resolve npm packages at runtime
+              regex: '^(?![./]|N(/|$))',
+              message:
+                'Bundle npm packages into `src/SuiteScripts/lib/` and import them from there. See docs/library-bundler.md.',
+              allowTypeImports: true,
+            },
+          ],
+        },
+      ],
     },
   },
   {

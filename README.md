@@ -48,7 +48,8 @@ outlast this repository and reach every SuiteCloud project.
 - SuiteCloud CLI commands work as usual, with the build running automatically before each deploy
   or upload
 - Native support for `object:import` of XML object files
-- Supports bundling third-party npm libraries into SuiteScript-compatible AMD modules
+- Supports bundling third-party npm libraries into SuiteScript-compatible AMD modules, and fails the
+  build on direct npm imports that NetSuite can't resolve
 
 ### Quality-of-life Features
 
