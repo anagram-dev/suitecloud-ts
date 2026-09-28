@@ -21,13 +21,7 @@ leaves type checking, linting and formatting to the developer.
 There are multiple ways of closing this gap, and many developers have already done it in their own
 projects. This one picks one of those ways, wires TypeScript, ESLint and Prettier into the
 SuiteCloud CLI workflow, and takes it one step further as a fully fledged starter project that is
-open for everyone to use. For example:
-
-- TypeScript and JavaScript sources co-exist, so existing projects can adopt TypeScript one file
-  at a time.
-- Third-party npm libraries can be bundled into SuiteScript-compatible AMD modules.
-- TypeScript v7 brings better performance and long-term support, and a Rollup step produces the
-  AMD modules it can no longer emit (see [Build Pipeline](docs/build-pipeline.md)).
+open for everyone to use.
 
 Static checks benefit everyone working on the project, including AI coding agents, which work best
 when each check gives them a fast, deterministic signal to verify their own changes. Agents also
@@ -45,22 +39,23 @@ outlast this repository and reach every SuiteCloud project.
 
 ## Features
 
-### Main features
+### Main Features
 
 - TypeScript v7 for better performance and long-term support
 - TypeScript and JavaScript sources co-exist, and TypeScript can import JavaScript, allowing
   incremental adoption of TypeScript into existing JavaScript projects
-- NetSuite types via the 3rd-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
+- NetSuite types via the third-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
 - SuiteCloud CLI commands work as usual, with the build running automatically before each deploy
+  or upload
 - Native support for `object:import` of XML object files
-- Support bundling third-party npm libraries into SuiteScript-compatible AMD modules
+- Supports bundling third-party npm libraries into SuiteScript-compatible AMD modules
 
 ### Quality-of-life Features
 
 - ESLint with TypeScript support and `requirejs` rules for plain JavaScript files
 - Prettier formatting
-- Includes GitHub Action for Pull Request validation
-- Pre-commit hooks for linting, format and conventional commit message
+- GitHub Action for pull request validation
+- Git hooks for linting, formatting and Conventional Commits messages
 - `AGENTS.md` and `CLAUDE.md` instructions for AI coding agents
 - Relevant subset of [`suitecloud-sdk` agent skills](https://github.com/oracle/netsuite-suitecloud-sdk/tree/master/packages/agent-skills)
 - NVM support via `.nvmrc` file
@@ -83,8 +78,8 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 
 ## Getting Started
 
-1. Copy the starter into a new folder and start a fresh Git history. Git has to exist before
-   `npm install`, since it sets up the pre-commit hooks:
+1. Copy the starter into a new folder and start a fresh Git history. The Git repository has to
+   exist before `npm install`, since the install sets up the Git hooks:
 
     ```bash
     git clone --depth 1 https://github.com/anagram-dev/suitecloud-ts.git my-project
@@ -103,7 +98,15 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 3. Follow [Setup](docs/setup.md) to install the prerequisites and dependencies, and to
    authenticate the SuiteCloud CLI.
 
-4. Replace the sample code with your own:
+4. Check that the setup works while the sample code is still in place. `project:validate` builds
+   the project first, then validates it against the authenticated account:
+
+    ```bash
+    npm test
+    suitecloud project:validate
+    ```
+
+5. Replace the sample code with your own:
 
     - `src/SuiteScripts/RL_Echo.ts` and `src/Objects/customscript_rl_echo.xml` are a sample RESTlet
       and its script object.
@@ -115,10 +118,10 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 
     `AGENTS.md` points at some of these files as examples, so update it after removing them.
 
-5. Optionally, disable any [quality-of-life features](docs/disabling-features.md) the project
+6. Optionally, disable any [quality-of-life features](docs/disabling-features.md) the project
    doesn't need.
 
-6. Replace this `README.md` with one for the new project. The files in `docs/` describe the
+7. Replace this `README.md` with one for the new project. The files in `docs/` describe the
    starter itself, so they can stay as they are.
 
 ## Documentation
