@@ -9,19 +9,20 @@
     "url": "git+https://github.com/anagram-dev/suitecloud-ts.git"
   },
   "scripts": {
-    "build:ts:compile": "./node_modules/typescript7/bin/tsc -p tsconfig.build.json",
+    "build:ts:compile": "npm run tsc7 -- -p tsconfig.build.json",
     "build:ts:bundle": "rollup -c rollup.config.build.mjs",
     "build:ts": "npm run build:ts:compile && npm run build:ts:bundle",
     "build:static": "copyfiles -u 1 -e \"./src/SuiteScripts/**/*.ts\" \"./src/SuiteScripts/**/*\" ./src/FileCabinet/",
     "build": "concurrently \"npm:build:ts\" \"npm:build:static\"",
     "bundle:lib": "rollup -c rollup.config.lib.mjs",
-    "check": "./node_modules/typescript7/bin/tsc --noEmit && ./node_modules/typescript7/bin/tsc --noEmit -p __tests__",
+    "check": "npm run tsc7 && npm run tsc7 -- -p __tests__",
     "clean": "rimraf ./src/FileCabinet/SuiteScripts ./build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest",
+    "tsc7": "./node_modules/typescript7/bin/tsc",
     "prepare": "husky"
   },
   "devDependencies": {
