@@ -4,7 +4,7 @@ Third-party npm packages cannot be loaded directly in SuiteScript, since it expe
 served from the File Cabinet. The library bundler pre-bundles selected packages into self-contained
 AMD files that can be uploaded and imported like any other SuiteScript file.
 
-## How it works
+## How It Works
 
 Each library gets a small entrypoint in `lib/` that re-exports the public API, for example:
 
@@ -19,12 +19,18 @@ Running `npm run bundle:lib` processes every entrypoint in `lib/` through Rollup
 - **`<package>.js`** — the full library bundled as an AMD module, ready for the File Cabinet
 - **`<package>.d.ts`** — bundled type declarations for use during TypeScript development
 
-Both output files should be committed to the repository. They are consumed directly by the TypeScript
-build pipeline, and no build step is required for day-to-day development after the initial bundle.
+Both output files should be committed to the repository. The build copies `<package>.js` like any
+other JavaScript file, and `tsc` reads `<package>.d.ts` for types. `bundle:lib` isn't part of
+`npm run build`, so it only needs to run again after adding or upgrading a library.
 
-## Bundling a new library
+## Bundling a New Library
 
-1. Install the package as a dev dependency:
+Rollup bundles the library as it is, without transpiling or polyfilling it. Before adding one,
+check that it doesn't depend on syntax newer than ES2023, or on Node.js or browser APIs such as
+`process`, `Buffer` or `fetch`, which SuiteScript may not provide.
+
+1. Install the package as a dev dependency. It's bundled into `src/SuiteScripts/lib/`, so NetSuite
+   never installs it:
 
     ```bash
     npm install --save-dev <package>
@@ -62,8 +68,13 @@ build pipeline, and no build step is required for day-to-day development after t
     git add src/SuiteScripts/lib/<package>.js src/SuiteScripts/lib/<package>.d.ts
     ```
 
-5. In your SuiteScript files, import the bundled library using its relative path:
+    If `npm run check` then reports errors in `<package>.d.ts`, the declarations may need patching
+    for TypeScript 7. See the `patch-zod-dts-variance` plugin in `rollup.config.lib.mjs` for Zod.
+
+5. In your SuiteScript files, import the bundled library by its path relative to the importing
+   file:
 
     ```ts
-    import name from './lib/<package>';
+    import name from './lib/<package>'; // from src/SuiteScripts/
+    import name from '../lib/<package>'; // from src/SuiteScripts/utils/
     ```
