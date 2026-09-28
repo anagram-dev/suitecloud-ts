@@ -8,7 +8,7 @@ const dirs = {
 
 export default [
   {
-    input: `${dirs.entrypoints}/zod.ts`,
+    input: `${dirs.entrypoints}/zod.mjs`,
     output: {
       file: `${dirs.output}/zod.js`,
       format: 'amd',
@@ -16,7 +16,7 @@ export default [
     plugins: [resolve()],
   },
   {
-    input: `${dirs.entrypoints}/zod.ts`,
+    input: `${dirs.entrypoints}/zod.mjs`,
     output: {
       file: `${dirs.output}/zod.d.ts`,
       format: 'es',

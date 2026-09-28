@@ -8,8 +8,8 @@ AMD files that can be uploaded and imported like any other SuiteScript file.
 
 Each library gets a small entrypoint in `lib/` that re-exports the public API, for example:
 
-```ts
-// lib/zod.ts
+```js
+// lib/zod.mjs
 export { z as default } from 'zod';
 ```
 
@@ -38,8 +38,8 @@ check that it doesn't depend on syntax newer than ES2023, or on Node.js or brows
 
 2. Create an entrypoint in `lib/` that exports the API your scripts will use, for example:
 
-    ```ts
-    // lib/<package>.ts
+    ```js
+    // lib/<package>.mjs
     export { something as default } from '<package>';
     ```
 
@@ -49,13 +49,13 @@ check that it doesn't depend on syntax newer than ES2023, or on Node.js or brows
     ```js
     // JS bundle
     {
-      input: `${dirs.entrypoints}/<package>.ts`,
+      input: `${dirs.entrypoints}/<package>.mjs`,
       output: { file: `${dirs.output}/<package>.js`, format: 'amd' },
       plugins: [resolve()],
     },
     // Type declarations
     {
-      input: `${dirs.entrypoints}/<package>.ts`,
+      input: `${dirs.entrypoints}/<package>.mjs`,
       output: { file: `${dirs.output}/<package>.d.ts`, format: 'es' },
       plugins: [resolve(), dts({ respectExternal: true })],
     },

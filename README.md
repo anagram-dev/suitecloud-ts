@@ -109,7 +109,7 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
       and its script object.
     - `src/SuiteScripts/utils/` holds the sample's error and response helpers.
     - `__tests__/sample-test.js` is a sample Jest test.
-    - Zod is bundled as a sample library. To remove it, delete `lib/zod.ts`,
+    - Zod is bundled as a sample library. To remove it, delete `lib/zod.mjs`,
       `src/SuiteScripts/lib/zod.*` and its entries in `rollup.config.lib.mjs`, then run
       `npm uninstall zod`.
 
