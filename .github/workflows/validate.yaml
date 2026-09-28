@@ -20,7 +20,9 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Install dependencies
-        run: npm ci --acceptsuitecloudsdklicense
+        run: npm ci
+        env:
+          SUITECLOUD_CLI_ACCEPT_LICENSE: 'true'
 
       - name: Check Format
         run: npm run format:check
