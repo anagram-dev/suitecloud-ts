@@ -6,8 +6,8 @@ The pipeline works around this by having `tsc` emit ESNext modules into an inter
 `build/` directory, then passing that output through Rollup to produce the AMD bundles
 that NetSuite expects.
 
-The `npm run build` command runs `build:ts` and `build:static` concurrently. `build:ts`
-chains two sequential steps; `build:static` runs independently in parallel:
+The `npm run build` command runs `build:ts` and `build:static` concurrently, and `build:ts` chains
+two sequential steps:
 
 ```mermaid
 flowchart TD
@@ -21,14 +21,14 @@ flowchart TD
     START -->|"build:static"| STATIC
     TS -->|"build:ts:compile\ntsc"| BUILD
     BUILD -->|"build:ts:bundle\nrollup → AMD"| FC
-    STATIC -->|"build:static\ncopyfiles"| FC
+    STATIC -->|"copyfiles"| FC
 ```
 
 ## `build:ts:compile` - TypeScript compilation
 
 TypeScript 7 compiles `src/SuiteScripts/**/*.ts` into `build/` using `tsconfig.build.json`.
-The output format is ESNext with ES modules (`module: "esnext"`), producing clean
-intermediate JS before any bundling. NetSuite's `N/*` module paths are left as bare imports at this stage.
+The output format is ESNext with ES modules (`module: "esnext"`). NetSuite's `N/*` module paths
+are left as bare imports at this stage.
 
 > **Note:** TypeScript 7 is installed as `typescript7` (aliased from `npm:typescript@^7`) to
 > avoid conflicting with the `typescript` package, which remains at v6 so that
@@ -52,4 +52,5 @@ structure. Several inline plugins handle NetSuite-specific concerns:
 
 Runs concurrently with `build:ts`. Every non-TypeScript file under `src/SuiteScripts/`
 (existing AMD scripts not managed by tsc, plus any other assets such as HTML templates or JSON)
-is copied directly into `src/FileCabinet/SuiteScripts/` with `copyfiles`.
+is copied directly into `src/FileCabinet/SuiteScripts/` with `copyfiles`. The `.ts` exclusion also
+covers `.d.ts` declarations, so they are never deployed.
