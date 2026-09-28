@@ -59,8 +59,9 @@ account.
   replaces a lot of manual implementation, as Zod does for data validation. Don't add it
   without the user's approval.
 - NetSuite can't resolve npm packages at runtime, so a suggested package must be bundled, never
-  imported directly. Bundle it as described in `docs/library-bundler.md`, then import it from
-  `./lib/<package>`.
+  imported directly. The build and ESLint reject direct imports. Bundle it as described in
+  `docs/library-bundler.md`, then import `src/SuiteScripts/lib/<package>` by a path relative to the
+  importing file.
 
 ## Writing JavaScript SuiteScripts
 
@@ -68,7 +69,8 @@ account.
   the `requirejs` rules.
 - To import a JS module from TypeScript, add a sibling `.d.ts` file that declares its exports. See
   `src/SuiteScripts/utils/error.js` and `src/SuiteScripts/utils/error.d.ts`.
-- When converting a JS file to TypeScript, replace the `.js` file and delete its `.d.ts`, if one exists.
+- When converting a JS file to TypeScript, replace the `.js` file and delete its `.d.ts`, if one
+  exists.
 
 ## Tests
 

@@ -8,8 +8,8 @@ The build runs automatically before each command that needs it (see
 suitecloud project:deploy
 ```
 
-For any file-specific command, pass its deployed path in the File Cabinet, not its source path.
-For example:
+For any file-specific command, pass the file's deployed path in the File Cabinet, not its source
+path. For example:
 
 ```bash
 suitecloud file:upload --paths /SuiteScripts/RL_Echo.js
@@ -43,7 +43,7 @@ the build and keep the developer experience consistent:
 | `object:import`    | Prints a note to move generated JS files |
 | `object:update`    | Prints a note to move generated JS files |
 
-Commands that write files into `FileCabinet` (`file:create`, `file:import`, `object:import`,
+Commands that write files into `src/FileCabinet/` (`file:create`, `file:import`, `object:import`,
 `object:update`) print a reminder to move any downloaded JS files into `src/SuiteScripts/`, where
 the build pipeline manages them. The hooks run `clean` before each build, so a file left in
 `src/FileCabinet/SuiteScripts/` is deleted the next time a hook builds the project.

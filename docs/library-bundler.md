@@ -1,6 +1,6 @@
 # Library Bundler
 
-Third-party npm packages cannot be loaded directly in SuiteScript, since it expects AMD modules
+Third-party npm packages can't be loaded directly in SuiteScript, since it expects AMD modules
 served from the File Cabinet. The library bundler pre-bundles selected packages into self-contained
 AMD files that can be uploaded and imported like any other SuiteScript file. The build and ESLint
 reject direct npm package imports in SuiteScript files, so every package has to go through the
@@ -38,7 +38,7 @@ check that it doesn't depend on syntax newer than ES2023, or on Node.js or brows
     npm install --save-dev <package>
     ```
 
-2. Create an entrypoint in `lib/` that exports the API your scripts will use, for example:
+2. Create an entrypoint in `lib/` that exports the API the scripts will use, for example:
 
     ```js
     // lib/<package>.mjs
@@ -73,8 +73,7 @@ check that it doesn't depend on syntax newer than ES2023, or on Node.js or brows
     If `npm run check` then reports errors in `<package>.d.ts`, the declarations may need patching
     for TypeScript 7. See the `patch-zod-dts-variance` plugin in `rollup.config.lib.mjs` for Zod.
 
-5. In your SuiteScript files, import the bundled library by its path relative to the importing
-   file:
+5. In SuiteScript files, import the bundled library by its path relative to the importing file:
 
     ```ts
     import name from './lib/<package>'; // from src/SuiteScripts/

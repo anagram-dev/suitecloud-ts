@@ -15,9 +15,9 @@ To silence it in an editor that lints automatically, add paths to the `globalIgn
 
 ## Prettier
 
-Prettier is linked to ESLint. `eslint-plugin-prettier` reports formatting violations as lint errors,
-so `npm run lint`, the pre-commit hook and the GitHub Action all enforce formatting, and Prettier
-can only be easily turned off together with ESLint.
+Prettier is linked to ESLint. `eslint-plugin-prettier` reports formatting violations as lint
+errors, so `npm run lint`, the pre-commit hook and the GitHub Action all enforce formatting, and
+Prettier can only be easily turned off together with ESLint.
 
 To exempt specific files, add them to `.prettierignore`.
 

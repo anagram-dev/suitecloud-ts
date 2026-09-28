@@ -45,8 +45,8 @@ structure. Several inline plugins handle NetSuite-specific concerns:
   AMD dependencies without its namespace interop helpers.
 - Mark relative imports that resolve to plain JS AMD files (not compiled by tsc) as external
   so they are not inlined. Those files are handled by the static copy step instead.
-- Fail the build on npm package imports, since NetSuite can't resolve them at runtime. Bundle them
-  with the [Library Bundler](library-bundler.md) instead.
+- Fail the build on npm package and Node.js module imports, since NetSuite can't resolve them at
+  runtime. Bundle npm packages with the [Library Bundler](library-bundler.md) instead.
 - Move `@NApiVersion`/`@NScriptType` JSDoc comments back to the top of each file,
   because Rollup's AMD wrapper would place them inside `define()`.
 
