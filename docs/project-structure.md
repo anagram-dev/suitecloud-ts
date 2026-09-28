@@ -6,7 +6,7 @@
 ├ .claude/skills/         # symlinks to .agents/skills/ for Claude Code
 ├ .github/workflows       # github actions
 ├ __tests__/              # jest tests
-├ docs/                   # documentation for developers using the boilerplate
+├ docs/                   # documentation for developers using the starter project
 ├ lib/                    # entry points for Zod and other 3rd-party libs for bundling
 ├ src/                    # folder used as `defaultProjectFolder` in suitecloud.config.js
 │ ├ FileCabinet/          # standard folder expected by the SuiteCloud CLI

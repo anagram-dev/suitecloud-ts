@@ -1,6 +1,6 @@
 # suitecloud-ts
 
-Boilerplate for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
+Starter project for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
 
 ## Table of Contents
 
@@ -20,8 +20,8 @@ leaves type checking, linting and formatting to the developer.
 
 There are multiple ways of closing this gap, and many developers have already done it in their own
 projects. This one picks one of those ways, wires TypeScript, ESLint and Prettier into the
-SuiteCloud CLI workflow, and takes it one step further as a fully fledged boilerplate that is open
-for everyone to use. For example:
+SuiteCloud CLI workflow, and takes it one step further as a fully fledged starter project that is
+open for everyone to use. For example:
 
 - TypeScript and JavaScript sources co-exist, so existing projects can adopt TypeScript one file
   at a time.
@@ -83,7 +83,7 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 
 ## Getting Started
 
-1. Copy the boilerplate into a new folder and start a fresh Git history. Git has to exist before
+1. Copy the starter into a new folder and start a fresh Git history. Git has to exist before
    `npm install`, since it sets up the pre-commit hooks:
 
     ```bash
@@ -119,7 +119,7 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
    doesn't need.
 
 6. Replace this `README.md` with one for the new project. The files in `docs/` describe the
-   boilerplate itself, so they can stay as they are.
+   starter itself, so they can stay as they are.
 
 ## Documentation
 
@@ -133,7 +133,7 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 
 ## License
 
-This boilerplate is licensed under [MIT No Attribution](LICENSE) (`MIT-0`). Projects created from
+This starter is licensed under [MIT No Attribution](LICENSE) (`MIT-0`). Projects created from
 it don't need to keep the copyright notice or credit this repository, though a link back is always
 appreciated.
 

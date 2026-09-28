@@ -21,7 +21,7 @@ export default {
     },
     {
       // TS preserves star imports upon build, and they need to be rewritten to
-      //  default imports to avoid Rollup adding interop boilerplate
+      //  default imports to avoid Rollup adding namespace interop helpers
       name: 'rewrite-nmodule-star-imports',
       transform(code) {
         return {
