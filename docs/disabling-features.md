@@ -29,7 +29,8 @@ To exempt specific files, add them to `.prettierignore`.
 The workflow only triggers on `pull_request`, so it never runs locally.
 
 To drop an individual check, remove its step from `.github/workflows/validate.yaml`. The
-`Check Format`, `Lint` and `Test` steps can each go on their own; the rest set up the job.
+`Check Format`, `Lint`, `Type Check` and `Test` steps can each go on their own, and the rest set up
+the job.
 
 If the repository will be hosted in GitHub, but no GitHub Actions are needed at all,
 delete `.github/workflows/validate.yaml`. If hosted elsewhere, then the GitHub Actions will be
