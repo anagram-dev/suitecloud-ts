@@ -15,7 +15,7 @@
     "build:static": "copyfiles -u 1 -e \"./src/SuiteScripts/**/*.ts\" \"./src/SuiteScripts/**/*\" ./src/FileCabinet/",
     "build": "concurrently \"npm:build:ts\" \"npm:build:static\"",
     "bundle:lib": "rollup -c rollup.config.lib.mjs",
-    "check": "./node_modules/typescript7/bin/tsc --noEmit",
+    "check": "./node_modules/typescript7/bin/tsc --noEmit && ./node_modules/typescript7/bin/tsc --noEmit -p __tests__",
     "clean": "rimraf ./src/FileCabinet/SuiteScripts ./build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

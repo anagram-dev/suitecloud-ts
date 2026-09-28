@@ -75,7 +75,16 @@ account.
 ## Tests
 
 Tests live in `__tests__/` and run on Jest with the SuiteCloud unit testing stubs for `N/*`
-modules. Mock a module with `jest.mock('N/record')`, as `__tests__/sample-test.js` does.
+modules. See the Tests section of `docs/usage.md`.
+
+- Write new tests in TypeScript, named `<Module>-test.ts`, at the path that mirrors the source in
+  `src/SuiteScripts/`. For example, `__tests__/utils/error-test.ts` tests
+  `src/SuiteScripts/utils/error.js`.
+- Import sources from `src/SuiteScripts/` by relative path, never through the `SuiteScripts/`
+  module name, which maps to the build output.
+- Mock a module with `jest.mock('N/record')`, and type its mocks with `jest.mocked(record.load)`.
+- If a stub module has no types in `@hitc/netsuite-types`, declare it in a `.d.ts` file
+  in `__tests__/`.
 
 ## Commits
 
