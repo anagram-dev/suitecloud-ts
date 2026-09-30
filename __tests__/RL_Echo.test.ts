@@ -9,7 +9,6 @@ jest.mock('N/log')
 jest.mock('N/runtime')
 
 beforeEach(() => {
-  jest.clearAllMocks()
   jest.mocked(error.create).mockImplementation(({ name, message }) => ({
     id: '1',
     name,

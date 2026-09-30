@@ -13,6 +13,7 @@ export default {
     ...suiteCloudConfig.transform,
     '^.+\\.ts$': path.join(import.meta.dirname, 'jest.transformer.mjs'),
   },
+  clearMocks: true,
   testPathIgnorePatterns: ['/node_modules/', '\\.d\\.ts$'],
   passWithNoTests: true,
 }

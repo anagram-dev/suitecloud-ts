@@ -85,6 +85,9 @@ modules. See the Tests section of `docs/usage.md`.
 - Import sources from `src/SuiteScripts/` by relative path, never through the `SuiteScripts/`
   module name, which maps to the build output.
 - Mock a module with `jest.mock('N/record')`, and type its mocks with `jest.mocked(record.load)`.
+- Don't call `jest.clearAllMocks()`. `clearMocks` in `jest.config.mjs` clears mock calls before
+  each test, but return values and implementations carry over, so set them in `beforeEach` or in
+  the test that needs them.
 - If a stub module has no types in `@hitc/netsuite-types`, declare it in a `.d.ts` file
   in `__tests__/`.
 

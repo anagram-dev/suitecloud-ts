@@ -61,6 +61,10 @@ it('should reject an invalid body', () => {
 });
 ```
 
+`clearMocks` in `jest.config.mjs` clears every mock's calls before each test, so tests don't call
+`jest.clearAllMocks()`. Return values and implementations carry over between tests, so set them in
+`beforeEach` or in the test that needs them.
+
 The SuiteCloud Jest configuration only transforms JavaScript, so `jest.transformer.mjs` adds
 TypeScript support. It strips the types with `typescript` and passes the result to the SuiteCloud
 transformer, which still hoists `jest.mock` calls above the imports. Jest doesn't type check

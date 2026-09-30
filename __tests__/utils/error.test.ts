@@ -9,10 +9,6 @@ import {
 
 jest.mock('N/error')
 
-beforeEach(() => {
-  jest.clearAllMocks()
-})
-
 describe('isErrorType', () => {
   it('should accept a known error type', () => {
     expect(isErrorType(ErrorType.BadRequest)).toBe(true)
