@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "src/SuiteScripts",
     "outDir": "build/",
-    "noEmit": false
+    "noEmit": false,
+    "noEmitOnError": true
   }
 }

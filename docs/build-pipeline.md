@@ -38,6 +38,8 @@ The output format is ESNext with ES modules (`module: "esnext"`). NetSuite's `N/
 are left as bare imports at this stage.
 
 `tsc` exits with an error on any type error, so `build:ts:bundle` doesn't run and the build fails.
+`noEmitOnError` also stops `tsc` from writing to `build/` on a type error, so `build/` keeps the
+last output that type-checked, unless a SuiteCloud CLI hook ran `clean` first and left it empty.
 
 > **Note:** TypeScript 7 is installed as `typescript7` (aliased from `npm:typescript@^7`) to
 > avoid conflicting with the `typescript` package, which remains at v6 so that
