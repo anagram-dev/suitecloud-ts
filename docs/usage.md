@@ -89,6 +89,8 @@ the build and keep the developer experience consistent:
 | `object:import`    | Prints a note to move generated JS files |
 | `object:update`    | Prints a note to move generated JS files |
 
+If the build or the tests fail, the hook stops the command before it writes anything to the account.
+
 Commands that write files into `src/FileCabinet/` (`file:create`, `file:import`, `object:import`,
 `object:update`) print a reminder to move any downloaded JS files into `src/SuiteScripts/`, where
 the build pipeline manages them. The hooks run `clean` before each build, so a file left in

@@ -6,6 +6,13 @@ The pipeline works around this by having `tsc` emit ESNext modules into an inter
 `build/` directory, then passing that output through Rollup to produce the AMD bundles
 that NetSuite expects.
 
+Since `tsc` already runs to check types, the pipeline reuses its output, and Rollup only changes the
+module format. A tool such as `swc` could compile TypeScript to AMD directly, but it would repeat
+work that `tsc` has already done.
+
+The pipeline doesn't minify the code. The deployed files read like the source without its types, so stack
+traces in the execution log stay easy to follow.
+
 The `npm run build` command runs `build:ts` and `build:static` concurrently, and `build:ts` chains
 two sequential steps:
 
@@ -29,6 +36,8 @@ flowchart TD
 TypeScript 7 compiles `src/SuiteScripts/**/*.ts` into `build/` using `tsconfig.build.json`.
 The output format is ESNext with ES modules (`module: "esnext"`). NetSuite's `N/*` module paths
 are left as bare imports at this stage.
+
+`tsc` exits with an error on any type error, so `build:ts:bundle` doesn't run and the build fails.
 
 > **Note:** TypeScript 7 is installed as `typescript7` (aliased from `npm:typescript@^7`) to
 > avoid conflicting with the `typescript` package, which remains at v6 so that

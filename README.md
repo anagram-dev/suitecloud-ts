@@ -9,6 +9,7 @@ Starter project for using TypeScript v7+ in SuiteCloud Account Customization Pro
 - [How It Works](#how-it-works)
 - [Getting Started](#getting-started)
 - [Documentation](#documentation)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Motivation
@@ -28,25 +29,37 @@ when each check gives them a fast, deterministic signal to verify their own chan
 need project and NetSuite context. `AGENTS.md` tells them where to make changes and how to verify
 them, and `.agents/skills/` vendors a subset of the
 [NetSuite agent skills](https://github.com/oracle/netsuite-suitecloud-sdk) that Oracle publishes,
-covering topics such as SDF best practices, record field IDs and role permissions.
+covering topics such as SDF best practices, record field IDs, role permissions, secure coding and
+SuiteScript 2.1 upgrades.
 
 Rather than becoming [one more competing standard](https://xkcd.com/927/), this project is also
-meant as a way of collaborating with the Oracle SuiteCloud team. Its folder structure, for example,
-demonstrates one of the alternatives proposed in
-[oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976).
-The hope is that ideas proven here make their way into the SuiteCloud CLI itself, so their effects
-outlast this repository and reach every SuiteCloud project.
+meant as a way of collaborating with the Oracle SuiteCloud team. Its folder structure follows
+Option 3 of
+[oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976),
+a proposal to bring TypeScript support to the SuiteCloud CLI. The hope is that ideas proven here
+make their way into the CLI itself, so their effects outlast this repository and reach every
+SuiteCloud project.
+
+Official support also matters when an account's customizations move to the customer's own team,
+which may not know TypeScript. If `project:create` scaffolded TypeScript the way it scaffolds Jest,
+that team would have a documented, supported setup to learn. This handoff mostly happens with ACPs,
+so the starter supports them first, and SuiteApp support is planned. Until the CLI supports
+TypeScript, the starter keeps a handoff manageable, since JavaScript can live alongside TypeScript.
 
 ## Features
 
 ### Main Features
 
-- TypeScript v7 for better performance and long-term support
+- TypeScript v7 for better performance, with a build that doesn't depend on AMD output, which
+  TypeScript 7 dropped, so projects can keep upgrading
 - TypeScript and JavaScript sources co-exist, and TypeScript can import JavaScript, allowing
   incremental adoption of TypeScript into existing JavaScript projects
 - NetSuite types via the third-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
 - SuiteCloud CLI commands work as usual, with the build running automatically before each deploy
   or upload
+- Type errors and failing tests stop a deploy before anything reaches the account
+- Unminified output that reads like the source, so stack traces in the execution log stay easy to
+  follow
 - Native support for `object:import` of XML object files
 - Supports bundling third-party npm libraries into SuiteScript-compatible AMD modules, and fails the
   build on direct npm imports that NetSuite can't resolve
@@ -150,6 +163,12 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 - [Library Bundler](docs/library-bundler.md): how to bundle third-party npm libraries.
 - [Disabling Quality-of-life Features](docs/disabling-features.md): how to turn off optional
   tooling.
+
+## Contributing
+
+Issues and pull requests are welcome. Feedback from developers who already maintain their own
+TypeScript setup for SuiteScript is especially useful, so share where yours differs, either here or
+on [oracle/netsuite-suitecloud-sdk#976](https://github.com/oracle/netsuite-suitecloud-sdk/issues/976).
 
 ## License
 
