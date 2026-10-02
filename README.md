@@ -81,8 +81,20 @@ the SuiteCloud CLI deploys, validates, packages or uploads files. See
 
 ## Getting Started
 
-1. Copy the starter into a new folder and start a fresh Git history. The Git repository has to
-   exist before `npm install`, since the install sets up the Git hooks:
+1. Create a new Git repository from the starter. The Git repository has to exist before
+   `npm install`, since the install sets up the Git hooks.
+
+    Create a GitHub repository from the template and clone it. Click **Use this template** on the
+    repository page, or run the command below with the [GitHub CLI](https://cli.github.com/).
+    GitHub starts the new repository with a fresh history:
+
+    ```bash
+    gh repo create my-project --template anagram-dev/suitecloud-ts --private --clone
+    cd my-project
+    ```
+
+    Alternatively, if not using GitHub, clone the starter into a new folder and start a fresh Git
+    history:
 
     ```bash
     git clone --depth 1 https://github.com/anagram-dev/suitecloud-ts.git my-project
