@@ -1,6 +1,7 @@
 # suitecloud-ts
 
-Starter project for using TypeScript v7+ in SuiteCloud Account Customization Projects (ACP).
+Starter project for using TypeScript for SuiteScript in SuiteCloud projects, specifically
+Account Customization Projects (ACP).
 
 ## Table of Contents
 
@@ -14,7 +15,7 @@ Starter project for using TypeScript v7+ in SuiteCloud Account Customization Pro
 
 ## Motivation
 
-This project aims to improve the experience of developing for NetSuite with SuiteCloud. Static
+This project aims to improve the experience of developing SuiteScript with SuiteCloud. Static
 checks catch mistakes before they reach NetSuite, where finding them usually means deploying and
 testing in an account. The SuiteCloud CLI already provides a testing framework with Jest, but
 leaves type checking, linting and formatting to the developer.
@@ -54,12 +55,14 @@ TypeScript, the starter keeps a handoff manageable, since JavaScript can live al
   TypeScript 7 dropped, so projects can keep upgrading
 - TypeScript and JavaScript sources co-exist, and TypeScript can import JavaScript, allowing
   incremental adoption of TypeScript into existing JavaScript projects
-- NetSuite types via the third-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
+- NetSuite types for `N/*` modules via the third-party [`@hitc/netsuite-types`](https://www.npmjs.com/package/@hitc/netsuite-types) package
 - SuiteCloud CLI commands work as usual, with the build running automatically before each deploy
   or upload
 - Type errors and failing tests stop a deploy before anything reaches the account
-- Unminified output that reads like the source, so stack traces in the execution log stay easy to
+- Unminified AMD output that reads like the source, so stack traces in the execution log stay easy to
   follow
+- Targets ES2023, the language level SuiteScript 2.1 supports, so the type checker rejects newer
+  APIs the runtime may lack
 - Native support for `object:import` of XML object files
 - Supports bundling third-party npm libraries into SuiteScript-compatible AMD modules, and fails the
   build on direct npm imports that NetSuite can't resolve
@@ -82,13 +85,13 @@ All of these are enabled by default, but can be left unused if desired. See
 
 ## How It Works
 
-TypeScript and JavaScript sources live in `src/SuiteScripts/`, outside the `FileCabinet/` folder
+SuiteScript sources, in TypeScript and JavaScript, live in `src/SuiteScripts/`, outside the `FileCabinet/` folder
 that the SuiteCloud CLI deploys. The build compiles them into `src/FileCabinet/SuiteScripts/`, so
 TypeScript files are never deployed and compiled output stays out of Git. See
 [Project Structure](docs/project-structure.md) for the full layout.
 
 Since TypeScript 7 no longer emits AMD modules, `tsc` compiles to ESNext and Rollup bundles the
-result into the AMD modules NetSuite expects. Hooks in `suitecloud.config.js` run this build before
+result into the AMD modules SuiteScript loads. Hooks in `suitecloud.config.js` run this build before
 the SuiteCloud CLI deploys, validates, packages or uploads files. See
 [Build Pipeline](docs/build-pipeline.md) for each step.
 
